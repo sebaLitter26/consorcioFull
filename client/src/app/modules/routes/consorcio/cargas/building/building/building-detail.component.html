@@ -1,0 +1,70 @@
+<main>
+    <div class="dashboard">
+        <ng-container *ngFor="let item of mapRef; index as i">
+            <div class="dashboard__header__item dash_card">
+                <app-dashboard-card [value]="item.value" [description]="item.header" [color]="item.color" [icon]="item.icon"></app-dashboard-card>
+            </div>
+        </ng-container>
+    </div>
+
+    <div class="header" role="header">
+        <h1>Detalle de building</h1>
+        <button appRoundButton mat-flat-button color="accent" class="btn btn-info" (click)="backTobuildingsList()">
+            <mat-icon>arrow_back</mat-icon> Volver
+        </button>
+    </div>
+
+    <mat-card class="mat-elevation-z0" *ngIf="buildingDetail?.building">
+        <mat-card-header class="product-information">
+            <!-- <div class="ean-image-container" *ngIf="buildingDetail?.building?.">
+                <img mat-card-image [src]="buildingDetail?.building?.producto?.imagen" alt="{{ buildingDetail?.building?.plu }}">
+            </div>
+
+            <div class="product-detail">
+
+                <mat-card-title>NÚMERO DE building</mat-card-title>
+                <mat-card-subtitle>{{ buildingDetail?.building?.id }}</mat-card-subtitle>
+
+                <mat-card-title>ESTADO</mat-card-title>
+                <mat-card-subtitle>{{ buildingDetail?.building?.estado }}</mat-card-subtitle>
+
+                <mat-card-title>TIPO DE building</mat-card-title>
+                <mat-card-subtitle>{{ buildingDetail?.building?.tipo_building }}</mat-card-subtitle>
+
+            </div>
+            <div class="product-detail">
+
+                <mat-card-title>FECHA</mat-card-title>
+                <mat-card-subtitle>{{ buildingDetail?.building?.fecha | date: 'dd/MM/yyyy hh:mm' }}</mat-card-subtitle>
+                
+                <mat-card-title>EDIFICIO</mat-card-title>
+                <mat-card-subtitle>{{ buildingDetail?.building?.nombre }} ({{ buildingDetail?.building?.legajo }})</mat-card-subtitle>
+                <span *ngIf="buildingDetail?.building?.producto">
+                    <mat-card-title>PLU</mat-card-title>
+                    <mat-card-subtitle>{{ buildingDetail?.building?.producto?.plu }}</mat-card-subtitle>
+
+                    <mat-card-title>DESCRIPCIÓN</mat-card-title>
+                    <mat-card-subtitle>{{ buildingDetail?.building?.producto?.descripcion }}</mat-card-subtitle>
+                </span>
+            </div> -->
+
+            
+
+        </mat-card-header>
+        <div class="tables-container">
+            <div class="table-container">
+                <app-building-event-detail-list [data]="$buildingDetail"></app-building-event-detail-list>
+            </div>
+            
+            <div class="table-container">
+                <app-building-serial-detail-list [data]="$buildingDetail"></app-building-serial-detail-list>
+            </div>
+            
+        </div>
+        
+    </mat-card>
+    
+</main>
+
+
+ 

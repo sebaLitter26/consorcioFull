@@ -1,0 +1,19 @@
+main {
+    padding: 20px;
+    box-sizing: border-box;
+}
+
+.header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+}
+
+.table-container {
+    margin-top: 24px;
+
+    .no-results{
+        text-align: center;
+    }
+}
+

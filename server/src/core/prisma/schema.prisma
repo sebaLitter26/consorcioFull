@@ -1,0 +1,141 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgres"
+  url      = env("DATABASE_URL")
+}
+
+model Category {
+  id        String     @id @default(uuid())
+  createdAt DateTime   @default(now())
+  updatedAt DateTime   @updatedAt
+  name      String     @unique
+  questions Question[]
+
+  @@index([name])
+}
+
+model Question {
+  id         String    @id @default(uuid())
+  createdAt  DateTime  @default(now())
+  updatedAt  DateTime  @updatedAt
+  content    String
+  categoryId String?
+  answers    Answer[]
+  category   Category? @relation(fields: [categoryId], references: [id])
+}
+
+model Answer {
+  id         String    @id @default(uuid())
+  createdAt  DateTime  @default(now())
+  updatedAt  DateTime  @updatedAt
+  content    String
+  isCorrect  Boolean   @default(false)
+  url        String
+  questionId String?
+  question   Question? @relation(fields: [questionId], references: [id])
+}
+
+model User {
+  id           String   @id @default(uuid())
+  email        String   @unique
+  password     String
+  name         String
+  roles        Roles[]  @default([user])
+  isActive     Boolean  @default(true)
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+  userId       String?  @unique
+  owner        Owner?
+  tenant       Tenant?
+  lastUpdateBy User?    @relation("lastUpdateByUser", fields: [userId], references: [id])
+  updateBy     User?    @relation("lastUpdateByUser")
+
+  @@index([email])
+}
+
+model Building {
+  id          String       @id @default(uuid())
+  createdAt   DateTime     @default(now())
+  updatedAt   DateTime     @updatedAt
+  address     String       @unique
+  location    String
+  floors      Int
+  letter      String       @db.Char(1)
+  images      String[]
+  appartments Appartment[]
+
+  @@index([address])
+}
+
+model Appartment {
+  id          String    @id @default(uuid())
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+  observation String
+  floor       Int
+  letter      String    @db.Char(1)
+  buildingId  String?
+  tenantId    String?   @unique
+  ownerId     String?
+  building    Building? @relation(fields: [buildingId], references: [id])
+  owner       Owner?    @relation(fields: [ownerId], references: [id])
+  tenant      Tenant?   @relation(fields: [tenantId], references: [id])
+
+  @@unique([floor, letter, buildingId])
+}
+
+model Tenant {
+  id          String      @id @default(uuid())
+  createdAt   DateTime    @default(now())
+  updatedAt   DateTime    @updatedAt
+  observation String
+  userId      String?     @unique
+  appartments Appartment?
+  user        User?       @relation(fields: [userId], references: [id])
+}
+
+model Owner {
+  id          String       @id @default(uuid())
+  createdAt   DateTime     @default(now())
+  updatedAt   DateTime     @updatedAt
+  observation String
+  userId      String?      @unique
+  appartments Appartment[]
+  user        User?        @relation(fields: [userId], references: [id])
+}
+
+model Product {
+  id        String           @id @default(uuid())
+  name      String
+  photo     String
+  price     Int
+  stock     Int
+  createdAt DateTime         @default(now())
+  updatedAt DateTime         @updatedAt
+  brand     String
+  carts     ProductOnOrder[] @relation("ProductOnOrder")
+}
+
+model Order {
+  id        String           @id @default(uuid())
+  cartItems ProductOnOrder[] @relation("ProductOnOrder")
+}
+
+model ProductOnOrder {
+  productId String
+  orderId   String
+  quantity  Int
+  order     Order   @relation("ProductOnOrder", fields: [orderId], references: [id])
+  product   Product @relation("ProductOnOrder", fields: [productId], references: [id])
+
+  @@id([productId, orderId])
+}
+
+enum Roles {
+  admin
+  user
+  superUser
+}

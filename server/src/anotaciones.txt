@@ -1,0 +1,8 @@
+Trae los cambios de la base -> schema 
+npx prisma db pull 
+
+Trae los cambios del schema -> base de datos 
+npm run prisma:apply 
+
+
+npx prisma migrate dev --name rename-migration --create-only

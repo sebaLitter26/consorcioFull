@@ -1,0 +1,41 @@
+<main>
+    <div class="header" role="header">
+        
+        <!-- <div class="action-btn" >
+            <button appRoundButton mat-flat-button color="accent" class="btn btn-info back" routerLink="/consorcio/report">
+                <mat-icon>arrow_back</mat-icon> Volver
+            </button>
+        </div> -->
+    </div>
+    
+    <!-- <h1>Carga de datos</h1> -->
+    <mat-tab-group (selectedTabChange)="changeTab($event.index)">
+        <mat-tab label="Edificio" >
+
+            <!-- <app-building></app-building> -->
+                
+        
+        </mat-tab>
+        <mat-tab label="Departamento" >
+
+            <!-- <app-appartment></app-appartment> -->
+            
+        </mat-tab>
+
+        <mat-tab label="Propietario" >
+
+            <!-- <app-owner></app-owner> -->
+          
+        </mat-tab>
+        <mat-tab label="Inquilino" >
+
+            <!-- <app-tenant></app-tenant> -->
+            
+        </mat-tab>
+
+        
+    </mat-tab-group>
+    <router-outlet name="carga"></router-outlet>
+        
+
+</main>

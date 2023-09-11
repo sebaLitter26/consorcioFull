@@ -1,0 +1,74 @@
+<main>
+    <h2>{{buildingAction}}ar edificio</h2>
+    <form class="form" [formGroup]="buildingForm" (ngSubmit)="onSubmit()">
+        
+
+        <mat-form-field appearance="fill" color="primary">
+            <mat-label>Dirección</mat-label>
+            <input matInput autocomplete="off" type="text" placeholder="Ingrese Dirección." formControlName="address">
+        </mat-form-field>
+
+        <mat-form-field appearance="fill" color="primary">
+            <mat-label>Localidad</mat-label>
+            <input matInput autocomplete="off" type="text" placeholder="Ingrese Localidad." formControlName="location">
+        </mat-form-field>
+
+        <!-- <mat-form-field appearance="fill" color="primary">
+            <mat-label>Pisos</mat-label>
+            <input matInput autocomplete="off" type="text" placeholder="Ingrese pisos." formControlName="floors">
+        </mat-form-field> -->
+
+        <mat-form-field class="state-form-field" appearance="fill" color="primary">
+            <mat-label>Pisos</mat-label>
+            <mat-select formControlName="floors">
+                <!-- <mat-option class="first-option" [value]="'all'" >P</mat-option> -->
+                <mat-option *ngFor="let floor of floors" [value]="floor">{{ floor }}</mat-option>
+            </mat-select>
+        </mat-form-field>
+
+        <mat-form-field appearance="fill" color="primary">
+            <mat-label>Letra máxima de departamento</mat-label>
+            <mat-select formControlName="letter">
+                <!-- <mat-option class="first-option" [value]="'all'" >P</mat-option> -->
+                <mat-option *ngFor="let letter of letters" [value]="letter">{{ letter }}</mat-option>
+            </mat-select>
+        </mat-form-field>
+
+       
+    </form>
+
+    <app-cool-file-input height="200px" [initialFiles]="this.images" (finalizaCarga)="addFile($event)"></app-cool-file-input>
+
+    <div class="submit-button-and-spinner">
+        <button *ngIf="!bSubmitting; else submitting"
+            appRoundButton
+            mat-stroked-button
+            color="primary"
+            class="btn-small"
+            (click)="buildingForm.reset()"
+        >
+            <mat-icon>clear</mat-icon>&nbsp;
+            Limpiar
+        </button>
+
+        <button
+            appRoundButton
+            mat-flat-button
+            color="accent"
+            class="btn-small"
+            type="submit"
+            (click)="onSubmit()" 
+            [disabled]="buildingForm.invalid"
+        >
+        
+            <mat-icon>send</mat-icon>&nbsp;
+            {{buildingAction}}ar
+        </button>
+
+        <ng-template #submitting>
+            <mat-spinner class="spinner" diameter="36"></mat-spinner>
+        </ng-template>
+    </div>
+
+
+</main>

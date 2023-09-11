@@ -1,0 +1,20 @@
+<main *ngIf="data?.appartments else noPlu">
+    <div
+        class="zoom-container"
+        *ngIf="_mouseOver"
+    >
+        <mat-icon>zoom_in</mat-icon>
+    </div>
+
+    <!-- <img 
+        [src]="data?.appartments?.imagen" (click)="openPluImage($event)"
+        (mouseover)="_mouseOver = true"
+        (mouseout)="_mouseOver = false"
+    > -->
+    <div class="details">
+        <p>Direccion {{ data?.address }}, {{ data?.location }}</p>
+    </div>
+</main>
+<ng-template #noPlu>
+    <p>-</p>
+</ng-template>
