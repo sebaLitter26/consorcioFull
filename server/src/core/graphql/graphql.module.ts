@@ -5,11 +5,15 @@ import { join } from 'path';
 
 @Module({
   imports: [
-    GraphQLModule.forRoot<ApolloDriverConfig>({
+    GraphQLModule.forRoot({
         driver: ApolloDriver,
         introspection: true,
         playground: true,
         autoSchemaFile: join(process.cwd(), 'src/core/graphql/api-schema.gql'),
+        cors: {
+          credentials: true,
+          origin: true,
+      },
     }),
   ],
 })

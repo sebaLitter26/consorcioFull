@@ -6,7 +6,7 @@
   "version": 1,
   "newProjectRoot": "projects",
   "projects": {
-    "rrhh-psico": {
+    "consorcio": {
       "projectType": "application",
       "schematics": {
         "@schematics/angular:component": {
@@ -23,7 +23,7 @@
         "build": {
           "builder": "@angular-devkit/build-angular:browser",
           "options": {
-            "outputPath": "dist/rrhh-psico",
+            "outputPath": "dist/consorcio",
             "index": "src/index.html",
             "main": "src/main.ts",
             "polyfills": "src/polyfills.ts",
@@ -141,12 +141,16 @@
         },
         "serve": {
           "builder": "@angular-devkit/build-angular:dev-server",
+          "options":{
+            "publicHost":"http://localhost:3050"
+          },
           "configurations": {
             "production": {
-              "browserTarget": "rrhh-psico:build:production"
+
+              "browserTarget": "consorcio:build:production"
             },
             "development": {
-              "browserTarget": "rrhh-psico:build:development"
+              "browserTarget": "consorcio:build:development"
             }
           },
           "defaultConfiguration": "development"
@@ -154,7 +158,7 @@
         "extract-i18n": {
           "builder": "@angular-devkit/build-angular:extract-i18n",
           "options": {
-            "browserTarget": "rrhh-psico:build"
+            "browserTarget": "consorcio:build"
           }
         },
         "test": {

@@ -19,7 +19,7 @@ export class AuthService {
         private readonly configService: ConfigService,
         private readonly prisma: PrismaService,
         private readonly jwtService: JwtService,
-        private readonly whatsappService: WhatsappService
+        //private readonly whatsappService: WhatsappService
     ) {}
 
     /* private getJwtToken( userId: string ) {
@@ -80,7 +80,7 @@ export class AuthService {
         });
 
        //this.smsService.sendSMS('+54925598729', '+5491165404122', 'Te logueaste Seba!'); // 15.485 $
-       this.whatsappService.sendMessage(1165404122,"hola Seba");
+       //this.whatsappService.sendMessage(1165404122,"hola Seba");
 
         //const token = this.getJwtToken( user.id );
 

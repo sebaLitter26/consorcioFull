@@ -4,7 +4,7 @@ export const environment = {
     production: false,
     preProduction: false,
     staging: false,
-    apiUrl: `http://localhost:${port}/graphql`,
+    apiUrl: `http://api/graphql`,
     /* apiInterfaceUrl: `http://slnxtest01${redcoto}:5021/interfaces/`,
     serialApiUrl: "http://localhost:8080/serialapi/",
     apiIpad: "http://ipadwebservices/empleadosws/ServiceSvc.svc/",
