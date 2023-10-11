@@ -1,5 +1,5 @@
 import { BadRequestException, Injectable, NotFoundException } from '@nestjs/common';
-import { Building } from '@prisma/client';
+import { Appartment, Building } from '@prisma/client';
 import { PrismaService } from 'src/core/prisma/prisma.service';
 import { PublicErrors } from 'src/interceptors/public-errors.enum';
 import { CreateBuildingDTO } from './dto/create-building.dto';
@@ -36,8 +36,37 @@ export class BuildingService {
     if(data.address)
       await this.validateBuilding(data.address);
 
+      let appartments: Appartment[] = [];
+      let LETTERS_APPARTMENT = 'ABCDEF';
+      let floor = 0;
+      while(data.floors > floor){
+        let letterIndex = 0;
+        let maxletter = LETTERS_APPARTMENT.indexOf(data.letter);
+        while(letterIndex <= maxletter){
+          appartments.push({
+            observation: `${floor} - ${LETTERS_APPARTMENT[letterIndex]}`,
+            floor,
+            letter: `${LETTERS_APPARTMENT[letterIndex]}`,
+            id: undefined, 
+            createdAt: new Date(), 
+            updatedAt: new Date(), 
+            ownerId: undefined, 
+            tenantId: undefined, 
+            buildingId: undefined
+
+          });
+          letterIndex++;
+        }
+        floor++;
+      }
+
     return await this.data.building.create({
-      data,
+      data: {
+        ...data, 
+        appartments: {
+          create: appartments
+        }
+      },
       include: { appartments: true },
     });
   }
@@ -47,7 +76,6 @@ export class BuildingService {
 
     //Verifica que el nuevo address sea unico. Que no exista en otro edificio.
     //if(data.address) await this.validateBuilding(data.address);
-    
 
     return await this.data.building.update({
       where: { id: data.id },

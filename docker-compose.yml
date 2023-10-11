@@ -4,22 +4,21 @@ services:
     image: "postgres:latest"
     environment:
       - POSTGRES_PASSWORD=postgres_password
-  nginx:
-    depends_on:
-      - api
-      - client
-    restart: always
-    build:
-      dockerfile: Dockerfile.dev
-      context: ./nginx
-    ports:
-      - "3050:80"
+    container_name: database
+    volumes:
+      - ./pgdata/data:/var/lib/postgresql/data
+    networks:
+      - nesjs-network
   api:
     build:
       dockerfile: Dockerfile.dev
       context: ./server
     ports:
-      - "5000:5000"
+      - 5000:5000
+      - 9229:9229
+    container_name: api
+    depends_on:
+      - postgres
     volumes:
       - /app/node_modules
       - ./server:/app
@@ -29,13 +28,24 @@ services:
       - PGDATABASE=postgres
       - PGPASSWORD=postgres_password
       - PGPORT=5432
+    networks:
+      - nesjs-network
+    
   client:
     stdin_open: true
+    ports:
+      - 3000:3000
     environment:
       - CHOKIDAR_USEPOLLING=true
+    container_name: client
     build:
       dockerfile: Dockerfile.dev
       context: ./client
     volumes:
       - /app/node_modules
       - ./client:/app
+    networks:
+      - nesjs-network
+
+networks:
+  nesjs-network:

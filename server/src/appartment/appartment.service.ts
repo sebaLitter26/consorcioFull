@@ -1,4 +1,4 @@
-import { BadRequestException, HttpException, Injectable } from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
 import { PrismaService } from 'src/core/prisma/prisma.service';
 import { CreateAppartmentDTO } from './dto/create-appartment.dto';
 import { UpdateAppartmentDTO } from './dto/update-appartment.dto';

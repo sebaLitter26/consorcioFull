@@ -164,6 +164,9 @@ export class CreateBuildingFormComponent implements OnInit {
         
         
         this.images = [...data.images],
+
+        console.log(this.images);
+        
         
         this.snackBarService.open(`Se modificaron las fotos del edificio.`, "Aceptar", 6000, "success-snackbar");
         this.bSubmitting = false;

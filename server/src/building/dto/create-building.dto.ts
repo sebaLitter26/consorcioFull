@@ -32,4 +32,6 @@ export class CreateBuildingDTO {
   @IsOptional()
   @Field(()=> [String],{ nullable: true })
   images: string[];
+
+  
 }

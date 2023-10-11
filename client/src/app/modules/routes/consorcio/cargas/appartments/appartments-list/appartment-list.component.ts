@@ -1,7 +1,7 @@
 
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component } from '@angular/core';
 import { Observable, Subject } from 'rxjs';
-import { Appartment, Building, BuildingListFilters, CupoSeleccionado, CupoSelection, CupoSucursal, Sucursal, UpdateResponse } from '..';
+import { Appartment, Building, BuildingListFilters, AppartmentSelection } from '..';
 import { ConfirmationDialogComponent, ConfirmationDialogData } from '../../../../../ui/dialogs/confirmation-dialog/confirmation-dialog.component';
 import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { OverlayService } from '../../../../../overlay/services/overlay.service';
@@ -14,7 +14,7 @@ import { ArrayUtils } from 'src/app/utils/array.utils';
 import { AppartmentService } from '../services/appartment.service';
 
 
-const day_format = (miliseconds: string) => [miliseconds.slice(0, 4), '-', miliseconds.slice(4,6), '-',miliseconds.slice(6,8)].join('');
+/* const day_format = (miliseconds: string) => [miliseconds.slice(0, 4), '-', miliseconds.slice(4,6), '-',miliseconds.slice(6,8)].join('');
 
 class ColumnDay {
     
@@ -45,7 +45,7 @@ class ColumnDay {
     getDay() {
         return (this.followingDate.getDate()).toLocaleString('en-US', {minimumIntegerDigits: 2, useGrouping:false})
     }
-}
+} */
 
 @Component({
     selector: 'app-appartment-list',
@@ -55,12 +55,12 @@ class ColumnDay {
 })
 export class AppartmentsListComponent {
 
-    CANT_DAYS_WEEK: number = 7;
+    LETTERS_APPARTMENT: string[] =['A','B','C','D','E','F'];
 
-    cupoUpdateEvent: Subject<CupoSelection[]> = new Subject<CupoSelection[]>();
+    deptoUpdateEvent: Subject<AppartmentSelection[]> = new Subject<AppartmentSelection[]>();
 
     /** Los andenes actuales. */
-    cupos: Appartment[][] = [];
+    appartments: Appartment[][] = [];
 
     /* patterns = {
         '0': { pattern: new RegExp(/[0-2]/) },
@@ -74,17 +74,17 @@ export class AppartmentsListComponent {
         buildingControl: new FormControl( '', Validators.required),
     });
 
-    cupos_error: number[] = [];
+    appartments_error: number[] = [];
 
-    selectedHours = new FormControl([9,13,18]);
+    //selectedHours = new FormControl([9,13,18]);
     /** Andenes seleccionados para su preparación */
-    selectedCupos: CupoSelection[] = [];
+    selectedAppartments: AppartmentSelection[] = [];
 
     loading: boolean = false;
 
-    week: ColumnDay[] = [];
+    //week: ColumnDay[] = [];
 
-    horasList: number[] = [0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23];
+    //horasList: number[] = [0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23];
 
     building$ : Observable<Building[]> | null = null;
     
@@ -116,7 +116,7 @@ export class AppartmentsListComponent {
             this.sucursalService.horaDesde = this.sucursalFormGroup.controls.horaDesdeControl.value ?? '';
             this.sucursalService.horaHasta = this.sucursalFormGroup.controls.horaHastaControl.value ?? '';
             
-            //this.cupoUpdateEvent.next(this.selectedCupos);
+            //this.cupoUpdateEvent.next(this.selectedAppartments);
         }
 
         By floor-> [
@@ -155,25 +155,34 @@ export class AppartmentsListComponent {
             ).subscribe({
             next: (result: Building) => {
                 this.loading = false;
-                console.log(result);
                 
-                if (!result || result.appartments.length == 0){
+                
+                if (result.appartments.length == 0){
                     this.snackBarService.open("No se encontraron departamentos para el edificio seleccionado", "Aceptar", 6000, "warning-snackbar");
-                    this.loading = false;
-                }
+                   
+                }else{
+                    console.log(this.LETTERS_APPARTMENT.indexOf(result.letter));
+                    this.LETTERS_APPARTMENT = this.LETTERS_APPARTMENT.slice(0,this.LETTERS_APPARTMENT.indexOf(result.letter)+1)
                     
-                else{
-                    //this.cupos = result;
+                    
+                    let floor = 0;
+                    while(result.floors > floor){
+                        this.appartments.push(result.appartments.filter(e=> e.floor == floor) );
+                        floor++;
+                    }
+                   
+                    console.log(this.appartments);
+                   
 
                     /* let arr = result.data.building.appartments;
                 arr.forEach((elem: Appartment)=> elem.forEach((cupo,i, arr2)=> {
                     //const cupo1 = {...cupo, cupomaximonuevo : cupo.cupomaximo, error : errors.includes(cupo.idhorariosentregacuposfecha) }
                     arr2[i]= cupo1;
                 }))
-                return arr; */
+                return arr; 
                     
                     this.week= [];
-                    for (let i= 0; i < this.CANT_DAYS_WEEK; i++) {
+                    for (let i= 0; i < this.LETTERS_APPARTMENT; i++) {
                         
                         this.week.push(new ColumnDay(i,`${this.cupos[0][i].letter}`));
                     }
@@ -183,39 +192,39 @@ export class AppartmentsListComponent {
                         if (a.hora > b.hora) return 1;
                         return 0;
                     }); */
-                    this.cupoUpdateEvent.next(this.selectedCupos);
-                    this.selectedCupos = [];
+                    this.deptoUpdateEvent.next(this.selectedAppartments);
+                    this.selectedAppartments = [];
                     this.changeDetectorRef.detectChanges();
                 }
             },
             error: (e) => {
-                this.cupos = [];
-                this.loading = false;
+                this.appartments = [];
                 console.error(e);
             }
         });
     }
 
-    _allCupoRowsSelected = (pos: number) => {
+    _allAppartmentRowsSelected = (pos: number) => {
         
-        if(!this.cupos) return false;
+        if(!this.appartments) return false;
         //const hora = this.cupos[pos][0].hora ;
-        
-        return this.selectedCupos.filter(elem=> elem.hora == pos).length >= this.CANT_DAYS_WEEK;
-        //return this.selectedCupos.filter(elem=> elem.hora == hora).length >= (this.CANT_DAYS_WEEK- (this.sucursalService.disponibilidad[hora] ?? []).length);
+        return true;
+        //return this.selectedAppartments.filter(elem=> elem.hora == pos).length >= this.LETTERS_APPARTMENT;
+        //return this.selectedAppartments.filter(elem=> elem.hora == hora).length >= (this.CANT_DAYS_WEEK- (this.sucursalService.disponibilidad[hora] ?? []).length);
         //const abailable: Disponibilidad[] = this.disponibilidad[hora];
         //const busy: Ocupacion[] = this.cupos?.ocupacion[hora] ?? [];
-        //return (!abailable) ? false : abailable.every((dispo: Disponibilidad) => dispo.fecha <= this.week[this.CANT_DAYS_WEEK-1].compareDate && this.selectedCupos.includes(dispo) && !busy.find(disable=> disable.fecha===dispo.fecha)) 
+        //return (!abailable) ? false : abailable.every((dispo: Disponibilidad) => dispo.fecha <= this.week[this.CANT_DAYS_WEEK-1].compareDate && this.selectedAppartments.includes(dispo) && !busy.find(disable=> disable.fecha===dispo.fecha)) 
         
     };
 
-    _allDayColumnSelected = (day: number) : boolean => {
-        if(!this.cupos) return false;
-        return this.selectedCupos.filter(elem=> elem.dia === day).length >= 23;
-        const cant_Cupos = this.cupos.length;
+    _allLetterColumnSelected = (letter: number) : boolean => {
+        if(!this.appartments) return false;
+        return true;
+        //return this.selectedAppartments.filter(elem=> elem.letter === letter).length >= 23;
+        /* const cant_Cupos = this.cupos.length;
         let i = cant_Cupos-1;
         let allSelected: boolean = true;
-        const selectedByDay = this.selectedCupos.filter(e=> e.dia == day);
+        const selectedByDay = this.selectedAppartments.filter(e=> e.dia == day); */
         /* do {
             const cupo = this.cupos[i];
             const dispo = (this.sucursalService.disponibilidad[cupo.hora] ?? []).find((e: Disponibilidad)=> e.fecha == day)
@@ -225,18 +234,18 @@ export class AppartmentsListComponent {
             i--;
         } while(i>=0 && allSelected); */
         
-        return allSelected ?? false;
+        //return allSelected ?? false;
     };
 
 
-    handleCupoSelected(dispo: CupoSelection){
+    handleDeptoSelected(dispo: any){
         
-        if(dispo && dispo.dia) {
-            if(dispo.selected && dispo.cupomaximo !== dispo.cupomaximonuevo){
-                this.selectedCupos.push(dispo);
-            }else
-                this.selectedCupos = this.selectedCupos.filter(cupo => !(cupo.dia == dispo.dia && cupo.hora === dispo.hora || cupo.cupomaximo === cupo.cupomaximonuevo));  // && !busy.includes(selected)
-            this.cupoUpdateEvent.next(this.selectedCupos);
+        if(dispo) {
+            /* if(dispo.selected && dispo.cupomaximo !== dispo.cupomaximonuevo){
+                this.selectedAppartments.push(dispo);
+            }else */
+                this.selectedAppartments = this.selectedAppartments.filter(cupo => !(cupo.floor == dispo.floor && cupo.letter === dispo.letter));  // && !busy.includes(selected)
+            this.deptoUpdateEvent.next(this.selectedAppartments);
             this.changeDetectorRef.detectChanges();
         }
     }
@@ -255,14 +264,14 @@ export class AppartmentsListComponent {
 
     updateDateColumns(event:MatCheckboxChange, day: number){
         if(!event.checked){
-            this.selectedCupos = ArrayUtils.removeDuplicate(this.selectedCupos,'dia','hora',day);
-            //this.selectedCupos = this.selectedCupos.filter(elem=> elem.dia != day);
+            this.selectedAppartments = ArrayUtils.removeDuplicate(this.selectedAppartments,'floor','letter',day);
+            //this.selectedAppartments = this.selectedAppartments.filter(elem=> elem.dia != day);
              //filter(seleccionado=> seleccionado.fecha != day);
         } else{
-            //let aux: CupoSelection[] = [];
+            //let aux: AppartmentSelection[] = [];
             
             
-            let selected: CupoSelection[] = [];
+            let selected: AppartmentSelection[] = [];
             //this.cupos.map((elem)=>selected.push(...elem.filter(elem=> elem.dia == day)));
             
             /* this.cupos.forEach((cupo:CupoSucursal) =>{
@@ -271,41 +280,41 @@ export class AppartmentsListComponent {
                if(event.checked)  //cupo.enabled &&
                     selected.push({...cupo, dia:day});
             }); */
-            this.selectedCupos.push(...selected);
+            this.selectedAppartments.push(...selected);
         }
         
-        //console.log(day, this.selectedCupos);
-        this.cupoUpdateEvent.next(this.selectedCupos);
+        //console.log(day, this.selectedAppartments);
+        this.deptoUpdateEvent.next(this.selectedAppartments);
         
         this.changeDetectorRef.detectChanges();
     }
 
-    updateCupoRows(event:MatCheckboxChange, pos: number) {
+    updateDeptoRows(event:MatCheckboxChange, pos: number) {
         
         /* if(!event.checked)
-            this.selectedCupos = ArrayUtils.removeDuplicate(this.selectedCupos,'hora','dia', this.cupos[pos][0].hora)  //.filter(e=> e.hora != hora);
+            this.selectedAppartments = ArrayUtils.removeDuplicate(this.selectedAppartments,'hora','dia', this.cupos[pos][0].hora)  //.filter(e=> e.hora != hora);
         else
-            this.selectedCupos.push(...this.cupos[pos]); */
-        this.cupoUpdateEvent.next(this.selectedCupos);
+            this.selectedAppartments.push(...this.cupos[pos]); */
+        this.deptoUpdateEvent.next(this.selectedAppartments);
         this.changeDetectorRef.detectChanges();
     }
 
 
     
     openConfirmationDialog(){
-        if(this.buildingFormGroup.invalid || this.selectedCupos.length < 1) return;
-        let updatedCupos: CupoSelection[] = this.selectedCupos.filter(elem => elem.cupomaximonuevo !== elem.cupomaximo );
-        updatedCupos = ArrayUtils.unique(updatedCupos,'idhorariosentregacuposfecha');
+        if(this.buildingFormGroup.invalid || this.selectedAppartments.length < 1) return;
+        //let updatedCupos: AppartmentSelection[] = this.selectedAppartments.filter(elem => elem.cupomaximonuevo !== elem.cupomaximo );
+        //updatedCupos = ArrayUtils.unique(updatedCupos,'idhorariosentregacuposfecha');
         
         let cupos = '';
-        updatedCupos.sort((a, b) => {
-            if (a.hora! < b.hora!) return -1;
-            if (a.hora! > b.hora!) return 1;
+        this.selectedAppartments.sort((a, b) => {
+            if (a.floor! < b.floor!) return -1;
+            if (a.floor! > b.floor!) return 1;
             return 0;
-        }).forEach(e=> cupos +='<br>'+e.nomfecha+' '+day_format(`${e.dia}`)+' - Banda: '+e.hora+' hs - '+ ' Cupo Max.: ' + e.cupomaximonuevo);
+        }).forEach(e=> cupos +=`<br>${e.floor} ${e.letter}) - Edificio: ${e.building.address} -  ${e.building.location}`);
         const confirmationDialogData: ConfirmationDialogData = {
-            title: `Modificar cupos`,
-            message: `Esta seguro de que desea modificar los siguientes cupos? ${cupos}`,
+            title: `Modificar departamento`,
+            message: `Esta seguro de que desea modificar los siguientes departamentos? ${cupos}`,
             color: 'accent',
             //showObservation: true,
         }

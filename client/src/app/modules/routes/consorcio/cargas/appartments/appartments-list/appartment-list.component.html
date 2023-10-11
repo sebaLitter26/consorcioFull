@@ -21,7 +21,7 @@
         <mat-form-field appearance="fill" color="warn">
             <mat-label>Edificio</mat-label>
             <mat-select formControlName="buildingControl">
-                <mat-option *ngFor="let building of building$ | async" [value]="building.id">{{building.address + ' - ' + building.location}}</mat-option>
+                <mat-option *ngFor="let building of building$ | async" [value]="building.id">{{building.address + ' - ' + building.location + ' ( ' +  building.appartments.length +' )'}}</mat-option>
               <!-- <mat-select-trigger>
                 {{selectedHours.value?.[0] || ''}}
                 <span *ngIf="(selectedHours.value?.length || 0) > 1" class="example-additional-selection">
@@ -76,7 +76,7 @@
             appRoundButton
             type="button"
             (click)="openConfirmationDialog()"
-            *ngIf="selectedCupos.length > 0 && !this.buildingFormGroup.invalid"
+            *ngIf="selectedAppartments.length > 0 && !this.buildingFormGroup.invalid"
         >
             <mat-icon>warehouse</mat-icon>&nbsp;
             Guardar los cambios
@@ -88,39 +88,39 @@
     <div class="table-container">
         <mat-progress-bar *ngIf="loading" mode="indeterminate"></mat-progress-bar>
         
-        <div *ngIf="cupos && cupos.length > 0; else tableLoader">
-            <mat-grid-list cols="{{CANT_DAYS_WEEK+1}}" rowHeight="30px" class="header-days">
+        <div *ngIf="appartments && appartments.length > 0; else tableLoader">
+            <mat-grid-list cols="{{LETTERS_APPARTMENT.length+1}}" rowHeight="30px" class="header-days">
                 <mat-grid-tile></mat-grid-tile>
-                <mat-grid-tile *ngFor="let day of week; let i = index;" class="header-day-content">
+                <mat-grid-tile *ngFor="let letter of LETTERS_APPARTMENT; let i = index;" class="header-day-content">
                     <label title="Asignados: 0 &nbsp;&nbsp; Utilizados: 0 ">
                         <!-- <mat-checkbox (click)="$event.stopPropagation()" (change)="updateDateColumns($event,day.compareDate)" [checked]="_allDayColumnSelected(day.compareDate)"  ></mat-checkbox> -->
-                        {{cupos[0][i].letter}}<!-- *ngIf="availableColumRow(day.compareDate)" -->
+                        {{letter}}<!-- *ngIf="availableColumRow(day.compareDate)" -->
                     </label>
                     
                 </mat-grid-tile>
                 
             </mat-grid-list>
             
-            <div *ngFor="let cupo of cupos; let c = index" >
-                <mat-grid-list cols="{{CANT_DAYS_WEEK+1}}" rowHeight="175px" >
+            <div *ngFor="let depto of appartments; let c = index" >
+                <mat-grid-list cols="{{LETTERS_APPARTMENT.length+1}}" rowHeight="175px" >
                     <mat-grid-tile class="firstCupo">
                         <label>
                             
                             <!-- <mat-checkbox (click)="$event.stopPropagation()" (change)="updateCupoRows($event, c)" [checked]="_allCupoRowsSelected(c)"  ></mat-checkbox> -->
-                            {{cupos[c][0].floor}} 
+                            {{appartments[c][0].floor | floor}} 
                             <!--  [disabled]="!cupo.enabled"   *ngIf="allowSelectAll" (change)="updateAllRows($event)"  [checked]="_allRowsSelected" [disabled]="allRowsAreDisabled()"*ngIf="cupo.enabled" -->
                         </label>
                     </mat-grid-tile>
                     
-                    <mat-grid-tile *ngFor="let day of week; let d = index">
+                    <mat-grid-tile *ngFor="let letter of LETTERS_APPARTMENT; let d = index">
                        
-                        <!-- <app-appartment-registry *ngIf="cupo[d]" class="cupos-block"
-                            [updateSource]="cupoUpdateEvent.asObservable()"
-                            [cupo] = cupo[d]
-                            [dia] = day
-                            (cupoSelectedEvent)="handleCupoSelected($event)"
+                        <app-appartment-registry *ngIf="depto[d]" class="cupos-block"
+                            [updateSource]="deptoUpdateEvent.asObservable()"
+                            [appartment] = depto[d]
+                            [letter] = d
+                            (deptoSelectedEvent)="handleDeptoSelected($event)"
                         >
-                        </app-appartment-registry> -->
+                        </app-appartment-registry>
                     </mat-grid-tile>
                 </mat-grid-list>
             </div>

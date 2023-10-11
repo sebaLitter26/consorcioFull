@@ -13,6 +13,8 @@ import { RoutesCommonModule } from "../../../../common/routes-common.module";
 import { AppartmentComponent } from "./appartment/appartment.component";
 import { AppartmentSharedService } from "./services/appartment-shared.service";
 import { AppartmentService } from "./services/appartment.service";
+import { AppartmentComponentRegistry } from "./appartment-registry/appartment-registry.component";
+import { FloorPipe } from "src/app/modules/ui/cool-file-input/pipes/floor.pipe";
 
 const routes: Routes = [
 
@@ -47,12 +49,14 @@ const routes: Routes = [
         AppartmentComponent,
         CupoHistoricComponent,
         CupoInformationComponent,
-        AppartmentComponent
+        AppartmentComponentRegistry,
+        FloorPipe
     ],
     providers: [
         AppartmentService,
         AppartmentSharedService,
-        DatePipe
+        DatePipe,
+        FloorPipe
     ],
 })
 export class AppartmentsModule {}

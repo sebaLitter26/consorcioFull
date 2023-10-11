@@ -142,7 +142,7 @@
         "serve": {
           "builder": "@angular-devkit/build-angular:dev-server",
           "options":{
-            "publicHost":"http://localhost:3050"
+           
           },
           "configurations": {
             "production": {

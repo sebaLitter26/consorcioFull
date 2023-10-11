@@ -1,6 +1,7 @@
 import { Field, InputType, PartialType, ID } from '@nestjs/graphql';
-import { IsUUID, IsNotEmpty } from 'class-validator';
+import { IsUUID, IsNotEmpty, IsArray, IsOptional } from 'class-validator';
 import { CreateBuildingDTO } from './create-building.dto';
+import { Appartment } from 'src/appartment/model/appartment';
 
 @InputType()
 export class UpdateBuildingDTO extends PartialType(CreateBuildingDTO) {
@@ -8,4 +9,5 @@ export class UpdateBuildingDTO extends PartialType(CreateBuildingDTO) {
   @IsUUID()
   @Field(() => ID)
   id: string;
+
 }

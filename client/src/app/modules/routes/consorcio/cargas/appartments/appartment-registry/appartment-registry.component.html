@@ -1,15 +1,16 @@
-<main *ngIf="cupo" class="cupo">
+<main *ngIf="appartment" class="cupo">
     <mat-card [ngStyle]="{'background-color':getBackgroundColor()}">
-        <mat-card-subtitle >{{dia.formatDate}} <span>{{cupo.hora}} hs</span></mat-card-subtitle> <!-- style="background-color: rgb(194, 173, 131);" -->
+        <mat-card-subtitle >{{appartment.floor | floor}} <span>{{appartment.letter}} </span></mat-card-subtitle> <!-- style="background-color: rgb(194, 173, 131);" -->
         
-        <mat-card-subtitle>Útilizados <span>{{cupo.cupoutilizado}}</span></mat-card-subtitle> <!-- style="background-color: rgb(210, 154, 56);" -->
-        <mat-card-subtitle>Máx actual <span>{{cupo.cupomaximo}}</span></mat-card-subtitle> <!-- style="background-color: rgb(185, 122, 6);" -->
+        <!-- <mat-card-subtitle>Útilizados <span>{{appartment.cupoutilizado}}</span></mat-card-subtitle> <!-- style="background-color: rgb(210, 154, 56);" 
+        <mat-card-subtitle>Máx actual <span>{{appartment.cupomaximo}}</span></mat-card-subtitle> <!-- style="background-color: rgb(185, 122, 6);" -->
+  
         <mat-card-content>
         <div class="scroll-content">
             <form [formGroup]="formRenditionListGroup" >
                 <mat-form-field appearance="fill" color="warn">
-                    <mat-label>Cupo maximo</mat-label>
-                    <input matInput autocomplete="off" type="number" placeholder="{{cupo.cupomaximonuevo}}" formControlName="cupoMaximoControl" min="0" (change)="updateCupoDay();">
+                    <mat-label>Notas</mat-label>
+                    <input matInput autocomplete="off" type="text" placeholder="{{appartment.observation}}" formControlName="cupoMaximoControl" min="0" (change)="updateAppartmentDay();">
                 </mat-form-field>
             </form>
           <!-- <span *ngIf="ocupacion">

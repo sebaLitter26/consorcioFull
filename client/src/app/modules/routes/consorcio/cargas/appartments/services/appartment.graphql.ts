@@ -96,6 +96,8 @@ query building($id: String!){
         address
         id
         images
+        floors
+        letter
         appartments{
           floor
           letter

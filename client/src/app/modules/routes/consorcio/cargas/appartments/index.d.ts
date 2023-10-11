@@ -35,6 +35,15 @@ export interface Appartment {
     tenant:      any
 }
 
+/** Payload para informar un appartment */
+export interface AppartmentRegistry extends Appartment {
+    error: boolean;
+}
+
+/** Payload para informar un appartment */
+export interface AppartmentSelection extends Appartment {
+    selected?: boolean;
+}
 
 /** Payload para la creacion de un building */
 export interface CreateAppartmentPayload{
