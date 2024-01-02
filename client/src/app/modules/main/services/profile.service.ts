@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { User } from '..';
 
+
 const EMPTY_USER: User = {
     id: 0,
     firstName: "",

@@ -1,7 +1,7 @@
 import { ConfigService } from '@nestjs/config';
 import { Inject, Injectable, UnauthorizedException } from '@nestjs/common';
 import { PassportStrategy } from '@nestjs/passport';
-import { ExtractJwt, Strategy } from 'passport-jwt';
+import { Strategy } from 'passport-oauth2';
 
 //import { User } from '../../user/model/user';
 import { JwtPayload } from '../intefaces/jwt-payload.interface';
@@ -10,22 +10,19 @@ import { User } from '@prisma/client';
 
 
 @Injectable()
-export class JwtStrategy extends PassportStrategy( Strategy ) {
+export class Oauth2Strategy extends PassportStrategy( Strategy ) {
 
     constructor(
         private readonly authService: AuthService
-
-        //configService: ConfigService
     ) {
 
-        super({
-            secretOrKey: process.env.JWT_SECRET, //configService.get('JWT_SECRET'),
-            jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken()
-        })
+        super(process.env.oauth2);
     }
 
     async validate( payload: JwtPayload ): Promise<User> {
 
+        console.log('validate' , payload);
+        
         const { id } = payload;
         
         const user = await this.authService.validateUser( id );

@@ -34,7 +34,7 @@ export class CartService {
      * @returns un `Observable` con el listado de Edificios
      */
     getBuildings(): Observable<Building[]> {
-        return this.http.get<Building[]>(`${environment.apiUrl}/GetBuildings`).pipe(take(1));
+        return this.http.get<Building[]>(`${environment.apiUrl}buildings`).pipe(take(1));
         
     }
 

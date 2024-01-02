@@ -7,13 +7,13 @@ import { CoolInputModule } from "../../ui/cool-input/cool-input.module";
 import { CoolDirectivesModule } from "../../ui/cool-input/cool-directives/cool-directives.module";
 
 const routes: Routes = [
-    {
-        path: '',
+    /* {
+        path: '*',
         redirectTo: 'in',
         pathMatch: 'full',
-    },
+    }, */
     {
-        path: "in",
+        path: '',
         component: SignInComponent,
     },
 ]
@@ -27,7 +27,7 @@ const routes: Routes = [
         CoolDirectivesModule,
     ],
     declarations: [
-        SignInComponent,
+        SignInComponent
     ],
     providers: []
 })

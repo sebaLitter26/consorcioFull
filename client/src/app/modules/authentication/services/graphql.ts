@@ -19,6 +19,18 @@ query {
 }
 `;
 
+
+
+export const oauthLogin = gql`
+query oauthLogin($token: String!) {
+  oauthLogin(accessToken: $token) {
+    
+    accessToken
+    refreshToken
+  }
+}
+`;
+
 export const login = gql`
 query login($email: String!, $password: String!) {
   login(email: $email, password: $password) {

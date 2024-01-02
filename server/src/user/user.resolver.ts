@@ -5,12 +5,12 @@ import { User } from './model/user';
 import { CreateUserInput } from './dto/create-user.input';
 import { UpdateUserInput } from './dto/update-user.input';
 import { ValidRolesArgs } from './dto/args/roles.arg';
-import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
+import { GraphQLAuthGuard, JwtAuthGuard, OAuth2Guard } from '../auth/guards/auth.guard';
 import { CurrentUser } from '../auth/decorators/current-user.decorator';
 import { Roles, User as UserSchema } from '@prisma/client';
 
 @Resolver(() => User)
-@UseGuards( JwtAuthGuard )
+@UseGuards( GraphQLAuthGuard )// JwtAuthGuard )
 export class UserResolver {
   constructor(private readonly userService: UserService) {}
 

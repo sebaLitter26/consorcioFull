@@ -3,7 +3,7 @@ import { MatDialog } from '@angular/material/dialog';
 import { Router } from '@angular/router';
 
 import { SnackBarService } from 'src/app/services/snackbar.service';
-import { Appartment, AppartmentRegistry, AppartmentSelection, CupoSelection, CupoSucursal } from '..';
+import { Appartment, AppartmentRegistry, AppartmentSelection } from '..';
 import { first, map, Observable, of, Subscription, takeWhile } from 'rxjs';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 

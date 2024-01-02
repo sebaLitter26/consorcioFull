@@ -2,7 +2,7 @@ import { UseGuards } from '@nestjs/common';
 import { Args, Mutation, Parent, Query, ResolveField, Resolver } from '@nestjs/graphql';
 
 import { AuthService } from './auth.service';
-import { JwtAuthGuard } from './guards/jwt-auth.guard';
+import { JwtAuthGuard, OAuth2Guard } from './guards/auth.guard';
 
 import { SignupInput, LoginInput } from './dto/inputs';
 import { AuthResponse } from './types/auth-response.type';
@@ -34,7 +34,7 @@ export class AuthResolver {
   }
 
   @Query( () => AuthResponse, { name: 'revalidate'})
-  @UseGuards( JwtAuthGuard )
+  @UseGuards( JwtAuthGuard )// JwtAuthGuard )
   async revalidateToken(
     @Args() { token }: RefreshTokenInput,
     @CurrentUser( /**[ ValidRoles.admin ] */  ) user: User
@@ -46,5 +46,16 @@ export class AuthResolver {
   async user(@Parent() auth: AuthResponse ) { 
     return this.authService.getUserFromToken(auth.accessToken);
   }
+
+  @Query( () => AuthResponse, { name: 'oauthLogin'})
+  @UseGuards( OAuth2Guard )// JwtAuthGuard )
+  async oauthLogin(){
+    return;
+  }
+   /*  @Args() { token }: RefreshTokenInput,
+    @CurrentUser( /**[ ValidRoles.admin ]   ) user: User
+  ): Promise<AuthResponse> {
+    return this.authService.refreshToken( token );
+  } */
 
 }

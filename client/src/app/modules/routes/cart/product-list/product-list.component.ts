@@ -10,7 +10,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { ProfileService } from 'src/app/modules/main/services/profile.service';
 import { CdkDragDrop, moveItemInArray, transferArrayItem } from '@angular/cdk/drag-drop';
 import {STEPPER_GLOBAL_OPTIONS} from '@angular/cdk/stepper';
-
+import { AuthService } from '@auth0/auth0-angular';
 
 @Component({
     selector: 'app-product-list',
@@ -74,7 +74,7 @@ export class ProductListComponent implements OnInit{
 
     order?: Order;
     loading: boolean = false;
-
+    user: any;
 
    
     constructor(
@@ -86,17 +86,35 @@ export class ProductListComponent implements OnInit{
         private activatedRoute: ActivatedRoute, 
         public router: Router,
         private profileService: ProfileService, 
+        public auth: AuthService
+       
     ) {}
 
     ngOnInit(): void {
         /** Obtiene la lista de conteos precargada por el resolver */
         this.loading = true;
+
+        
     
         this.identification = this.activatedRoute.snapshot.queryParams as Identification;
         if(!this.identification.building){
             this.identification = undefined;
             return;
         }
+
+        this.auth.isAuthenticated$.subscribe(isAuthenticaed => {
+            if(isAuthenticaed) {
+                console.log(this.auth.user$);
+                
+              //this.router.navigate(['/dashboard'])
+            }
+        })
+
+        this.auth.user$.subscribe((success: any) => {
+            this.user = success;
+            console.log(this.user);
+            
+          });
         
         this.findUser(this.identification.phone);
         
@@ -185,6 +203,7 @@ export class ProductListComponent implements OnInit{
         this.loading = true;
         
     }
+
 
     
 }

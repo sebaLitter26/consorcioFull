@@ -24,7 +24,7 @@ const routes: Routes = [
     {
         path: 'cargas',
         loadChildren: () => import('./cargas/carga.module').then(m => m.CargasModule),
-        canActivate: [ AuthorizationGuard ],
+        //canActivate: [ AuthorizationGuard ],
         //component: CargasComponent,
         //resolve: {empleadoDetail: LegajoDetailResolver},
         data: { animation: 'isRight' } 
@@ -35,8 +35,8 @@ const routes: Routes = [
         data: { animation: 'isLeft' } 
     }, 
     {
-        path: '**',
-        redirectTo: 'cargas',
+        path: '',
+        redirectTo: '/cargas',
         pathMatch: 'full'
     },
 ]

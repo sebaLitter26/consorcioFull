@@ -18,6 +18,7 @@ import { ProductListComponent } from './product-list/product-list.component';
 import { OrderHistoricComponent } from './orders/orders-history.component';
 import { OrderDetailComponent } from './orders/order-detail/order-detail.component';
 
+
 const routes: Routes = [
     {
         path: 'product-list',
@@ -31,8 +32,8 @@ const routes: Routes = [
         data: { animation: 'isLeft' } 
     }, 
     {
-        path: '*',
-        redirectTo: '/cart/product-list',
+        path: '',
+        redirectTo: '/product-list',
         pathMatch: 'full'
     },
 ]
@@ -50,6 +51,7 @@ const routes: Routes = [
         LoadersModule,
         DashboardCardModule,
         UserModule,
+        
     ],
     declarations: [
         ProductListComponent, 

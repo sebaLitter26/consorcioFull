@@ -6,7 +6,7 @@ import * as bcrypt from 'bcrypt';
 import { SignupInput, LoginInput } from './dto/inputs';
 import { AuthResponse } from './types/auth-response.type';
 import { PrismaService } from '../core/prisma/prisma.service';
-import { ConfigService } from '@nestjs/config';
+//import { ConfigService } from '@nestjs/config';
 import { User } from '@prisma/client';
 import { PublicErrors } from 'src/interceptors/public-errors.enum';
 import { WhatsappService } from 'src/core/whatsapp/whatsapp.service';
@@ -16,7 +16,7 @@ import { WhatsappService } from 'src/core/whatsapp/whatsapp.service';
 export class AuthService {
 
     constructor(
-        private readonly configService: ConfigService,
+        //private readonly configService: ConfigService,
         private readonly prisma: PrismaService,
         private readonly jwtService: JwtService,
         //private readonly whatsappService: WhatsappService
@@ -115,7 +115,7 @@ export class AuthService {
     async refreshToken(token: string): Promise<AuthResponse> {
         try {
           const { userId } = this.jwtService.verify(token, {
-            secret: this.configService.get('JWT_SECRET'),
+            secret: process.env.JWT_SECRET //this.configService.get('JWT_SECRET'),
           });
     
           return this.generateTokens({
@@ -139,8 +139,8 @@ export class AuthService {
     
     private generateRefreshToken(payload: { userId: string }): string {
         return this.jwtService.sign(payload, {
-          secret: this.configService.get('JWT_SECRET'),
-          expiresIn: this.configService.get('JWT_EXPIRE'),
+          secret: process.env.JWT_SECRET, // this.configService.get('JWT_SECRET'),
+          expiresIn: process.env.JWT_EXPIRE   //this.configService.get('JWT_EXPIRE'),
         });
     }
 
@@ -168,6 +168,24 @@ export class AuthService {
         }
         return this.getUser(user['userId']) ;
     }
+
+
+    //new loggin 
+
+    async validateUser2(payload: { email: string }) : Promise<User> {
+        console.log('AuthService');
+        console.log(payload);
+        const user = await this.prisma.user.findUnique({ where: {email: payload.email } });
+        console.log(user);
+        if (user) return user;
+        console.log('User not found. Creating...');
+        /* return this.prisma.user.create({
+            data: payload
+        }); */
+    }
+
+    // getUser instead of findUser
+    
 
 }
 

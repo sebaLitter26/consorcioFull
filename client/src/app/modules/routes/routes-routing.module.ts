@@ -13,7 +13,7 @@ const routes: Routes = [
     {
         path: 'cart',
         loadChildren: () => import('./cart/product-list.module').then(m => m.ProductListModule),
-        canActivate: [ AuthorizationGuard ],
+        //canActivate: [ AuthorizationGuard ],
     },
     {
         path: 'development',
@@ -26,8 +26,8 @@ const routes: Routes = [
         canActivate: [ AuthorizationGuard ],
     },
     {
-        path: '**',
-        redirectTo: 'consorcio',
+        path: '',
+        redirectTo: '/cart/product-list',
         pathMatch: 'full'
     },
 ];
@@ -36,6 +36,7 @@ const routes: Routes = [
     imports: [
         RouterModule.forChild(routes),
         AuthorizationModule,
+        
         
     ],
     exports: [

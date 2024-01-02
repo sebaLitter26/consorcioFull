@@ -33,6 +33,11 @@
                 "jsbarcode",
                 "node-forge"
             ],
+            "stylePreprocessorOptions": {
+              "includePaths": [
+                "src", "./node_modules"
+              ]
+            },
             "assets": [
               "src/favicon.ico",
               "src/assets"
@@ -147,10 +152,10 @@
           "configurations": {
             "production": {
 
-              "browserTarget": "consorcio:build:production"
+              "buildTarget": "consorcio:build:production"
             },
             "development": {
-              "browserTarget": "consorcio:build:development"
+              "buildTarget": "consorcio:build:development"
             }
           },
           "defaultConfiguration": "development"
@@ -158,7 +163,7 @@
         "extract-i18n": {
           "builder": "@angular-devkit/build-angular:extract-i18n",
           "options": {
-            "browserTarget": "consorcio:build"
+            "buildTarget": "consorcio:build"
           }
         },
         "test": {

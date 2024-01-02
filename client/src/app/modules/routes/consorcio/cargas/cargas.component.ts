@@ -64,11 +64,6 @@ export class CargasComponent implements OnInit{
 
     tabIndex: number = 0;
 
-    
-
-    
-
-    
 
     constructor(
         public recursosService: ResourceService,

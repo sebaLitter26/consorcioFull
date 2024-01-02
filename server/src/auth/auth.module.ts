@@ -1,5 +1,5 @@
 import { JwtModule } from '@nestjs/jwt';
-import { ConfigModule, ConfigService } from '@nestjs/config';
+//import { ConfigModule, ConfigService } from '@nestjs/config';
 
 import { PassportModule } from '@nestjs/passport';
 import { Module } from '@nestjs/common';
@@ -7,18 +7,33 @@ import { JwtStrategy } from './strategies/jwt.strategy';
 
 import { AuthService } from './auth.service';
 import { AuthResolver } from './auth.resolver';
+import { SessionSerializer } from './strategies/serializer';
 
 /* import { UserModule } from './../user/user.module';
 import { UserService } from '../user/user.service'; */
 
 @Module({
-  providers: [ AuthResolver, AuthService, JwtStrategy ],
+  //controllers: [AuthResolver],
+  providers: [
+    JwtStrategy,
+    SessionSerializer,
+    AuthService,
+    AuthResolver
+  ],
   exports: [ JwtStrategy, PassportModule, JwtModule ],
   imports: [
-
-    ConfigModule,
-
+    JwtModule.register({
+      secret: process.env.JWT_SECRET,
+      signOptions: {
+        expiresIn: '1h',
+      }
+        
+    }),
     PassportModule.register({ defaultStrategy: 'jwt' }),
+    /* ConfigModule,
+    
+
+   
 
     JwtModule.registerAsync({
       imports: [ ConfigModule ],
@@ -29,7 +44,7 @@ import { UserService } from '../user/user.service'; */
             expiresIn: '1h',
           }
         })
-    }),
+    }), */
 
     //UserModule,
 

@@ -14,6 +14,8 @@ import { DynamicTableModule } from './modules/ui/dynamic-table/dynamic-table.mod
 import { CoolFileInputModule } from './modules/ui/cool-file-input/cool-file-input.module';
 import { LoadersModule } from './modules/ui/loaders/loaders.module';
 import { CoolInputModule } from './modules/ui/cool-input/cool-input.module';
+import { AuthModule } from '@auth0/auth0-angular';
+import { environment } from 'src/environments/environment';
 
 
 @NgModule({
@@ -34,6 +36,7 @@ import { CoolInputModule } from './modules/ui/cool-input/cool-input.module';
         CoolFileInputModule,
         LoadersModule,
         CoolInputModule,
+        AuthModule.forRoot(environment.oauth),
     ],
     providers: [],
     bootstrap: [

@@ -8,12 +8,14 @@ import { AnswerModule } from './answer/answer.module';
 import { CategoryModule } from './category/category.module';
 import { QuizModule } from './quiz/quiz.module';
 import { CommonModule } from './common/common.module';
+import { PassportModule } from '@nestjs/passport';
 import { AuthModule } from './auth/auth.module';
 import { UserModule } from './user/user.module';
 import { AppartmentModule } from './appartment/appartment.module';
 import { BuildingModule } from './building/building.module';
 import { OwnerModule } from './owner/owner.module';
 import { TenantModule } from './tenant/tenant.module';
+
 
 @Module({
   imports: [
@@ -25,6 +27,7 @@ import { TenantModule } from './tenant/tenant.module';
     CommonModule,
     UserModule,
     AuthModule,
+    PassportModule.register({ session: true }),
     AppartmentModule,
     BuildingModule,
     OwnerModule,

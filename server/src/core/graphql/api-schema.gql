@@ -159,6 +159,7 @@ type Query {
   users(roles: [Roles!]): [User!]!
   user(id: ID!): User!
   revalidate: AuthResponse!
+  oauthLogin: AuthResponse!
   appartments: [Appartment!]!
   appartment(id: String!): Appartment!
   buildings: [Building!]!

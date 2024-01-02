@@ -1,8 +1,9 @@
-import { Field, InputType } from '@nestjs/graphql';
+import { Field, InputType, PartialType } from '@nestjs/graphql';
 import { IsEmail, IsNotEmpty, MinLength } from 'class-validator';
+import { LoginInput } from './login.input';
 
 @InputType()
-export class SignupInput {
+export class SignupInput  {  //extends PartialType(LoginInput) 
 
     @Field( () => String )
     @IsEmail()
