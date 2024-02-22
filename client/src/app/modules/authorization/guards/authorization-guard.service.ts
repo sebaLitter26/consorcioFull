@@ -19,6 +19,7 @@ export class AuthorizationGuard {
         const navbarItemsLength: number = this.navbarService.getNavbarItems().length;
         
         if (this.profileService.hasRouteAccess(pageRoute)) {
+            
             return true;
         }
 

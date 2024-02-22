@@ -130,7 +130,7 @@ export class ReportComponent{
         private datepipe: DatePipe,
         public router: Router,
     ) {
-        this.searchBuilding();
+        //this.searchBuilding();
     }
 
     searchBuilding() : void {

@@ -5,27 +5,30 @@ import { SharedModule } from '../../shared.module';
 import { CoolDirectivesModule } from '../../ui/cool-input/cool-directives/cool-directives.module';
 import { DashboardCardModule } from '../../ui/dashboard-card/dashboard-card.module';
 import { DynamicTableModule } from '../../ui/dynamic-table/dynamic-table.module';
-import { ProfileDetailComponent } from './profile-detail/profile-detail.component';
+//import { ProfileDetailComponent } from './profile-detail/profile-detail.component';
 import { ProfileComponent } from './profile/profile.component';
 import { UserService } from './services/user-service.service';
 import { UserAdminComponent } from './usuarios/user-admin.component';
+import { AuthorizationGuard } from '../../authorization/guards/authorization-guard.service';
 
 
 const routes: Routes = [
     {
         path: 'user-admin',
         component: UserAdminComponent,
-        data: { animation: 'isLeft' } 
+        data: { animation: 'isLeft' },
+        //canActivate: [ AuthorizationGuard ], 
     },
     {
         path: 'profile',
         component: ProfileComponent,
+        //canActivate: [ AuthorizationGuard ],
     },
-    /* {
-        path: '',
+    {
+        path: '*',
         redirectTo: 'profile',
         pathMatch: 'full',
-    } */
+    }
 ]
 
 @NgModule({
@@ -37,7 +40,7 @@ const routes: Routes = [
     ],
     declarations: [
         ProfileComponent,
-        ProfileDetailComponent,
+        //ProfileDetailComponent,
         UserAdminComponent,
     ],
     providers: [
@@ -45,7 +48,7 @@ const routes: Routes = [
     ],
     exports:[
         ProfileComponent,
-        ProfileDetailComponent,
+        //ProfileDetailComponent,
     ]
 })
 export class UserModule { }

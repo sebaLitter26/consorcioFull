@@ -31,6 +31,9 @@ export class ResourceService {
         const payload = {
             page, limit
         }
+
+        console.log('getBuildings');
+        
         return this.http.post<any[]>(`${environment.apiUrl}buildings`,payload);
         
     }

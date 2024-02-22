@@ -2,16 +2,13 @@ import { Injectable } from '@angular/core';
 import { HttpClient, HttpErrorResponse, HttpHeaders } from '@angular/common/http';
 import { Observable, of } from 'rxjs';
 import { delay, map, switchMap, tap } from 'rxjs/operators';
-import { SignInResponse } from '../../main';
 import { ProfileService } from '../../main/services/profile.service';
 import { EncryptService } from 'src/app/services/encrypt.service';
 import { environment } from 'src/environments/environment';
 import { RegisterData, UserSignIn } from '..';
 import { Apollo } from 'apollo-angular';
-import { login, oauthLogin, registerData } from './graphql';
-import { IdToken, User } from '@auth0/auth0-angular';
-
-export const LOCAL_STORAGE_TOKEN: string = "consorcio_token";
+import { login, oAuthLogin, registerData } from './graphql';
+import { AuthService, IdToken, User } from '@auth0/auth0-angular';
 
 @Injectable()
 export class AuthenticationService {
@@ -19,7 +16,8 @@ export class AuthenticationService {
   constructor(
       private apollo: Apollo,
       private profileService: ProfileService,
-      private encryptService: EncryptService,
+      private authService: AuthService,
+      //private encryptService: EncryptService,
       private http: HttpClient
   ) { }
 
@@ -29,7 +27,7 @@ export class AuthenticationService {
    * @param password la password del usuario
    * @returns un `Observable` con un `SignInResponse` que tiene toda la información del usuario
    */
-  signIn(username: string, password: string): Observable<SignInResponse> {
+  /* signIn(username: string, password: string): Observable<SignInResponse> {
       const userSignIn: UserSignIn = {
           email: username,
           password,
@@ -41,19 +39,30 @@ export class AuthenticationService {
           }),
           switchMap(encryptedPassword => this.login(userSignIn)), //this.http.post<SignInResponse>(`${environment.apiUrl}auth/email/login`, userSignIn)),
           tap((signInResponse: SignInResponse) => {
-              localStorage.setItem(LOCAL_STORAGE_TOKEN, signInResponse.token ?? "");
+              localStorage.setItem(environment.LOCAL_STORAGE_TOKEN, signInResponse.token ?? "");
               this.profileService.setupUser(signInResponse.user);
           }),
       );
-  }
+  } */
 
   /**
    * Inicia sesión con el token del usuario.
    * @returns un `Observable` con un `SignInResponse` que tiene toda la información del usuario
    */
-  tokenSignIn(): Observable<SignInResponse> {
-      const savedToken: string | null = localStorage.getItem(LOCAL_STORAGE_TOKEN);
-      const headers: HttpHeaders = new HttpHeaders()
+  tokenSignIn() : Observable<User | null> {
+      const savedToken: string | null = localStorage.getItem(environment.LOCAL_STORAGE_TOKEN);
+      if(!savedToken) return of(null);
+      return this.OAuthLogin(savedToken);
+  }
+      /* this.getOAuthUser().subscribe(token => {
+            
+        if(token) 
+          return this.OAuthLogin(token.__raw);
+        return false
+      });
+  } */
+      
+      /* const headers: HttpHeaders = new HttpHeaders()
           .append('Cache-Control', 'no-store')
           .append('Content-Type', 'application/json; charset=utf-8')
           .append('Type', 'web')
@@ -65,17 +74,17 @@ export class AuthenticationService {
           tap((signInResponse: SignInResponse) => {
               //console.log(signInResponse);
               
-              localStorage.setItem(LOCAL_STORAGE_TOKEN, signInResponse.token ?? "");
-              this.profileService.setupUser({...signInResponse.user, token: signInResponse.token});
+              localStorage.setItem(environment.LOCAL_STORAGE_TOKEN, signInResponse.token ?? "");
+              //this.profileService.setupUser({...signInResponse.user, token: signInResponse.token});
           }),
-      );
+      ); 
   }
 
-  /* backSession(identity: User){
+   backSession(identity: User){
 
     console.log('backSession', identity);
     
-  return this.OAuthLogin(identity).pipe(tap((signInResponse: SignInResponse) => {
+  return this.oAuthLogin(identity).pipe(tap((signInResponse: SignInResponse) => {
           
       }),
   );
@@ -83,7 +92,7 @@ export class AuthenticationService {
   } */
 
   // Login
-  login(userSignIn: UserSignIn) {
+  /* login(userSignIn: UserSignIn) {
     return this.apollo
     .watchQuery(
       {
@@ -106,22 +115,45 @@ export class AuthenticationService {
       }).pipe(map((result: any) => {
         return result.data.register;
       }));
+  } */
+
+  // Login
+  login(){
+    this.authService.loginWithPopup();
+  }
+
+  /**
+     * Obtiene un `Observable` que permite suscribirse a cambios en el usuario actual.
+     * @returns un `Observable` con la estructura del usuario
+     */
+  getOAuthUser(): Observable<IdToken | null | undefined> {
+    return this.authService.idTokenClaims$;
+  }
+
+  getIsAutenticated(): Observable<boolean>{
+    return this.authService.isAuthenticated$;
   }
 
   // OAuth Login
-  OAuthLogin(token: string) {
-    console.log(token);
-    
+  OAuthLogin(token: string){
     return this.apollo
     .watchQuery(
       {
-        query: oauthLogin,
+        query: oAuthLogin,
         variables: {token},
         fetchPolicy: 'network-only'
       }
-    ).valueChanges.pipe(map((result: any) => {
-        return result.data.login;
+    ).valueChanges.pipe(map((result: any) =>  {
+      this.profileService.setupUser(result.data.oAuthLogin, token);
+      return result.data.oAuthLogin ;
     }));
+  }
+
+
+  logOut(){
+    this.authService.logout({ logoutParams: { returnTo: document.location.origin } });
+    this.profileService.killUser();
+    
   }
 
 

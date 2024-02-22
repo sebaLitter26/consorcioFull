@@ -100,7 +100,7 @@ export class NavbarService {
                 description: 'Carga de datos',
                 icon: 'fa fa-fw fa-tasks',
                 route: 'consorcio/cargas',
-                checked: true,
+                checked: false,
             });
         }
 
@@ -109,7 +109,7 @@ export class NavbarService {
                 description: 'Mis cargas',
                 icon: 'fa fa-fw fa-route',
                 route: 'consorcio/report',
-                checked: true,
+                checked: false,
             });
         }
 
@@ -137,7 +137,7 @@ export class NavbarService {
                 description: 'Lista de productos',
                 icon: 'fa fa-fw fa-tasks',
                 route: 'cart/product-list',
-                checked: true,
+                checked: false,
             });
         }
 
@@ -146,7 +146,7 @@ export class NavbarService {
                 description: 'Mis Compras',
                 icon: 'fa fa-fw fa-route',
                 route: 'cart/order-history',
-                checked: true,
+                checked: false,
             });
         }
 

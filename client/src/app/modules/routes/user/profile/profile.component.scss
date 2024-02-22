@@ -1,3 +1,7 @@
 .profile__container {
     min-height: calc(100vh - var(--toolbar-height));
+
+    img{
+      border-radius: 10px;
+    }
   }

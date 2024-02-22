@@ -15,38 +15,35 @@
     ERROR: error | null;
     sessionId: string;
 }
-*/
 
 export interface SignInResponse{
     user: User;
     token: string;
 } 
 
-
-
-
 export interface Status{
     id: 1; 
     name: string; 
     __entity: string;
+} */
+
+
+
+
+export interface Appartment {
+
+    id: string;
+    observation: string;
+    floor: number;
+    letter: string;
+    building : Building;
+
 }
 
-export interface User {
-    //permisos: Access[];
-
-    createdAt: string;
-    deletedAt: string | null;
-    email: string;
-    firstName: string;
-    id: number;
-    lastName: string;
-    photo: string;
-    provider: string;
-    role: Status | null;
-    socialId: string;
-    status: Status | null;
-    updatedAt: string;
-    token: string;
+export interface Building {
+    address: string;
+    location: string;
+    images: string[];
 }
 
 /* export interface Perfil extends Profile {

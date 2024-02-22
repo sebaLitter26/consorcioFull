@@ -161,7 +161,7 @@ export class OrderHistoricComponent{
         this.overlayService.displayLoadingOverlay();
         this.loading = true;
         
-        this.cartService.getOrdersByPhone(filters.phone).subscribe((data: Order[]) => {
+        /* this.cartService.getOrdersByPhone(filters.phone).subscribe((data: Order[]) => {
             
             this.orders = data;
             
@@ -175,7 +175,7 @@ export class OrderHistoricComponent{
             }, 100);
             
 
-        });
+        }); */
     }
 
 }

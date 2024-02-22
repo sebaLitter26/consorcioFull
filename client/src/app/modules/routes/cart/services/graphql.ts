@@ -3,42 +3,43 @@ import { gql } from "apollo-angular";
 
 // query
 
-export const meData = gql`
-query {
-  me {
-    status
-    message
-    user {
-      id
-      name
-      lastname
-      email
-      registerDate
+export const PRODUCTS = gql`
+query products{
+  products{
+    id
+    name
+    picture
+    price
+    stock
+    brand
+    description
+  }
+}
+`;
+
+
+
+
+export const ORDERS = gql`
+    query ordersByAppartment($appartmentId: String!){
+        ordersByAppartment(appartmentId: $appartmentId){
+          id,
+          name,
+          email,
+          rol,
+          picture,
+          isActive,
+          appartment { 
+            floor, 
+            letter, 
+            id
+          },
+          
+        }
+      
     }
-  }
-}
 `;
-
-
-
-export const oAuthLogin = gql`
-query oAuthLogin($token: String!){
-  oAuthLogin(token: $token){
-    id,
-    name,
-    modifierId,
-  	rol,
-    phone,
-    picture,
-    isActive,
-    email,
-    appartment { floor , letter,  id, buildingId },
-    notes,
-    phone
-  }
-}
-`;
-
+/* 
 export const login = gql`
 query login($email: String!, $password: String!) {
   login(email: $email, password: $password) {
@@ -52,23 +53,18 @@ query login($email: String!, $password: String!) {
 export const getUsers = gql`
 query {
   users {
-    id,
-    name,
-    modifierId,
-  	rol,
-    phone,
-    isActive,
-    email,
-    appartmentId,
-    notes,
-    phone
+    id
+    name
+    lastname
+    email
+    registerDate
   }
 }
 `;
 
 
 
-// mutations
+// mutations 
 export const registerData = gql`
     mutation addUser($user: UserInput!) {
         register(user: $user) {
@@ -83,4 +79,4 @@ export const registerData = gql`
             }
         }
     }
-`;
+`; */

@@ -31,6 +31,7 @@ export interface Building{
 export interface Appartment {
     id: string;
     building: Building;
+    buildingId: string;
     owner?: Owner | null;
     tenant?: Tenant | null;
     floor: number;

@@ -1,4 +1,39 @@
 <div class="profile__container">
-  profile
+
     <!-- <app-profile-detail [empleado]="empleado$ | async"></app-profile-detail> -->
+
+
+    <!-- div *ngIf="auth.user$ | async as user">
+      Some info about you:
+      <ul *ngIf="auth.user$ | async as user" >
+          <img [src]="user.picture" alt="" height="50px">
+      <li>Name: {{ user.given_name }} {{ user.family_name }}</li>
+      <li>Email: {{ user.email }}</li>
+      </ul>
+  </div> -->
+
+    <mat-card class="login-card" *ngIf="identification$ | async as identification">
+      <mat-card-header>
+          <mat-card-title-group>
+              <mat-card-title>{{identification.name}}</mat-card-title>
+              <mat-card-subtitle>{{identification.email}}</mat-card-subtitle>
+              <img [src]="identification.picture" alt="identification.name">
+          </mat-card-title-group>
+          
+      </mat-card-header>
+      
+      <mat-card-content>
+        <p *ngIf="identification.phone as phone">
+          Telefono: {{phone}}
+        </p>
+      </mat-card-content>
+      <mat-card-content>
+        <p *ngIf="identification.appartment as appartment">
+          Departamento: {{appartment.floor}} - {{ appartment.letter}}
+        </p>
+      </mat-card-content>
+      <mat-card-actions>
+        
+      </mat-card-actions>
+    </mat-card>
   </div>

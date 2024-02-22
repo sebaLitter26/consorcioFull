@@ -34,8 +34,6 @@ query building($id: String!){
           letter
           observation
           id
-          ownerId
-          tenantId
       }
     }
 }

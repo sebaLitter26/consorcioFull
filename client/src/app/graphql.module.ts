@@ -4,6 +4,7 @@ import { APOLLO_OPTIONS, ApolloModule } from 'apollo-angular';
 import { ApolloClientOptions, ApolloLink, InMemoryCache } from '@apollo/client/core';
 import { HttpLink } from 'apollo-angular/http';
 import { onError } from '@apollo/client/link/error';
+import { setContext } from '@apollo/client/link/context';
 import { environment } from 'src/environments/environment';
 
 export function createApollo(httpLink: HttpLink): ApolloClientOptions<any> {
@@ -16,9 +17,23 @@ export function createApollo(httpLink: HttpLink): ApolloClientOptions<any> {
       console.log('Network Error', networkError);
     }
   });
-  const http = ApolloLink.from([errorLink, httpLink.create({ uri: `${environment.apiUrl}` })]);
+
+  const auth = setContext((operation, context) => {
+    const token = localStorage.getItem(environment.LOCAL_STORAGE_TOKEN);
+    
+    if (token === null) {
+      return {};
+    } else {
+      return {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      };
+    }
+  });
+
   return {
-    link: http,
+    link: ApolloLink.from([errorLink, auth, httpLink.create({ uri: `${environment.apiUrl}` })]),
     cache: new InMemoryCache(),
   };
 }

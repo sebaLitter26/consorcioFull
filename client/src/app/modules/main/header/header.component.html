@@ -17,10 +17,10 @@
 
     <div class="profile" matRipple [matMenuTriggerFor]="profileMenu">
         <h3 appDesktop>
-            {{ profileService.user.firstName }} {{profileService.user.lastName}}  
+            {{ profileService.user.name }}  
             ({{ profileService.user.email }})
         </h3>
-        <img *ngIf="profileService.user.photo" [src]="profileService.user.photo">
+        <img *ngIf="profileService.user.picture" [src]="profileService.user.picture">
         <mat-icon>arrow_drop_down</mat-icon>
     </div>
 </mat-toolbar>
@@ -37,17 +37,17 @@
         Mi perfil
     </button>
 
-    <button appButtonAuthorization="station_edit-configuration" mat-menu-item (click)="openStationConfiguration()">
+    <!-- <button appButtonAuthorization="station_edit-configuration" mat-menu-item (click)="openStationConfiguration()">
         <mat-icon>monitor</mat-icon>
         Mi estación
-    </button>
+    </button> -->
 
     <button mat-menu-item (click)="logout()">
         <mat-icon>exit_to_app</mat-icon>
         Cerrar sesión
     </button>
 
-    <div
+    <!-- <div
         class="sandbox-mode-wrapper"
         mat-menu-item
         (click)="$event.stopPropagation()"
@@ -56,7 +56,7 @@
         <mat-slide-toggle #sandboxToggle [checked]="sandboxService.isSandboxMode()" (change)="toggleSandboxMode()" (click)="$event.stopPropagation();">
             Modo sandbox
         </mat-slide-toggle>
-    </div>
+    </div> -->
 </mat-menu>
 
 <mat-menu #versionMenu="matMenu" [overlapTrigger]="false" [xPosition]="'before'">

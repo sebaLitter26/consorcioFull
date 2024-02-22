@@ -59,7 +59,7 @@ const routes: Routes = [
 
             {
                 path: '*',
-                redirectTo: 'cargas/(carga:building)',
+                redirectTo: '/cargas/(carga:building)',
                 pathMatch: 'full'
             },
         ]
@@ -97,4 +97,4 @@ const routes: Routes = [
         ResourceService,
     ]
 })
-export class CargasModule { }
+export class CargasModule {}

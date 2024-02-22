@@ -1,11 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { BreakpointObserver, BreakpointState } from '@angular/cdk/layout';
 import { Router } from '@angular/router';
-//import { environment } from 'src/environments/environment';
 import { NavbarService } from '../services/navbar.service';
 import { OverlayService } from '../../overlay/services/overlay.service';
 import { NavbarItem, NavigationItem } from '..';
-import { of } from 'rxjs';
 
 @Component({
   selector: 'app-navbar',
@@ -18,8 +16,6 @@ export class NavbarComponent implements OnInit {
     navbarIsOpen: boolean | null = null;
 
     isMobile: boolean = false;
-
-    //environment = environment;
 
     constructor(
         private breakpointObserver: BreakpointObserver,

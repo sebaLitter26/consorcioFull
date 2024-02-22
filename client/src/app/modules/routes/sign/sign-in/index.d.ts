@@ -1,4 +1,4 @@
-
+/* 
 export interface User{
     family_name: string
     given_name: string
@@ -13,5 +13,5 @@ interface Identity{
     provider: string
     connection: string
     isSocial: boolean
-}
+} */
 

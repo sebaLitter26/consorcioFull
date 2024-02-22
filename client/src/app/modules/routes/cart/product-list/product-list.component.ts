@@ -1,8 +1,7 @@
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnInit} from '@angular/core';
-import { Building, Order, Identification, Product } from '../../model';
 import { CartService } from '../services/cart.service'
-import { Observable, Subject } from 'rxjs';
-import { FormBuilder, Validators } from '@angular/forms';
+import { Subject } from 'rxjs';
+import { AbstractControl, FormArray, FormBuilder, ValidatorFn, Validators } from '@angular/forms';
 import { OverlayService } from '../../../overlay/services/overlay.service';
 import { SnackBarService } from 'src/app/services/snackbar.service';
 import { animate, style, transition, trigger } from '@angular/animations';
@@ -10,7 +9,10 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { ProfileService } from 'src/app/modules/main/services/profile.service';
 import { CdkDragDrop, moveItemInArray, transferArrayItem } from '@angular/cdk/drag-drop';
 import {STEPPER_GLOBAL_OPTIONS} from '@angular/cdk/stepper';
-import { AuthService } from '@auth0/auth0-angular';
+import { Order, Product, ResolvedData } from '..';
+import { Building } from '../../consorcio/cargas/building';
+import { User } from '../../user';
+
 
 @Component({
     selector: 'app-product-list',
@@ -49,34 +51,34 @@ import { AuthService } from '@auth0/auth0-angular';
 })
 export class ProductListComponent implements OnInit{
 
+    user: User = this.profileService.user;
 
     cartFormGroup = this.fb.group({
-        cartCtrl: [<Product[]>[], [Validators.required, Validators.minLength(1)]],
+        cartCtrl : [<Product[]>[], [Validators.required, Validators.minLength(3)] ],
     });
+    
     contactFormGroup = this.fb.group({
-        phoneCtrl: ['', Validators.required],
-        floorCtrl: ['', Validators.required],
-        deptoCtrl: ['', Validators.required],
+        
+        phoneCtrl: [this.user.phone, Validators.required],
+        floorCtrl: [this.user.appartment?.floor , Validators.required],
+        deptoCtrl: [this.user.appartment?.letter , Validators.required],
         buildingCtrl: ['', Validators.required],
         observacionesControl: [''],
         //fechaControl: [this.today],
     });
 
-    building$ : Observable<Building[]> = this.cartService.getBuildings();  
-    pisosEdificio: number[] = [1,2,3,4,5,6,7,8,9];
-    deptosEdificio: string[] = ['A', 'B', 'C'];
+    //building$ : Observable<Building[]> = this.cartService.getBuildings();  
+    pisosEdificio: number[] = [];
+    deptosEdificio: string[] = [];
 
     today = new Date();
     isChangedAnimation: Subject<boolean> = new Subject<boolean>();
     
-    identification?: Identification;
-    orders?: Order[];
+    resolvedData: ResolvedData = this.activatedRoute.snapshot.data.cartDetail as ResolvedData;
 
     order?: Order;
     loading: boolean = false;
-    user: any;
 
-   
     constructor(
         public cartService: CartService,
         private overlayService: OverlayService,
@@ -86,55 +88,28 @@ export class ProductListComponent implements OnInit{
         private activatedRoute: ActivatedRoute, 
         public router: Router,
         private profileService: ProfileService, 
-        public auth: AuthService
        
     ) {}
 
     ngOnInit(): void {
         /** Obtiene la lista de conteos precargada por el resolver */
         this.loading = true;
+        const bui = this.resolvedData.buildings.find(e => e.id == this.user.appartment?.buildingId )
 
+        this.contactFormGroup.controls.buildingCtrl.setValue(this.user.appartment?.buildingId ?? '')
         
-    
-        this.identification = this.activatedRoute.snapshot.queryParams as Identification;
-        if(!this.identification.building){
+        /* if(!this.identification.building){
             this.identification = undefined;
             return;
         }
-
-        this.auth.isAuthenticated$.subscribe(isAuthenticaed => {
-            if(isAuthenticaed) {
-                console.log(this.auth.user$);
-                
-              //this.router.navigate(['/dashboard'])
-            }
-        })
-
-        this.auth.user$.subscribe((success: any) => {
-            this.user = success;
-            console.log(this.user);
-            
-          });
+        this.findUser(this.identification.phone); */
         
-        this.findUser(this.identification.phone);
         
     }
 
 
-
-    products: Product[] = [
-        { brand:'Oreo', photo:'img/1233', price:345, name:'Galletitas', stock:10 },
-        { brand:'Mr. Musculo', photo:'img/1244', price:345, name:'Detergente', stock: 5 },
-        { brand:'Playadito', photo:'img/1255', price:345, name:'Yerba', stock: 7 },
-        { brand:'Felt-Fort', photo:'img/1266', price:345, name:'Chocolate', stock: 8 },
-        { brand:'Andes', photo:'img/1277', price:345, name:'Cerveza', stock: 9 },
-        { brand:'Esperado', photo:'img/1288', price:345, name:'Vino', stock:2 },
-        { brand:'Arcor', photo:'img/1299', price:345, name:'Arberja', stock: 6 },
-        { brand:'La Campañola', photo:'img/1300', price:345, name:'Atun', stock: 8 },
-        { brand:'Arcor', photo:'img/1311', price:345, name:'Azucar', stock:10 },
-    ];
-    
-    cart: any[] = [];
+    products: Product[] = [...this.resolvedData.products];
+    cart: Product[] = [];
     
     drop(event: CdkDragDrop<Product[]> ) {
         if (event.previousContainer === event.container) {
@@ -142,20 +117,68 @@ export class ProductListComponent implements OnInit{
         } else {
             transferArrayItem(event.previousContainer.data, event.container.data, event.previousIndex, event.currentIndex);
         }
+
+        this.cartFormGroup.controls.cartCtrl.setValue(this.cart)
         
+    }
+
+    displayBuildingSelect = (buildingId: string) => {
+        const edificio = this.resolvedData.buildings.find(e => e.id == buildingId )
+        if(!edificio) return '';
+
+        const pisos: number[] = [1,2,3,4,5,6,7,8,9];
+        this.pisosEdificio = pisos.slice(0, pisos.indexOf(edificio.floors)+1)
+
+        const deptos: string[] = ['A', 'B', 'C', 'D', 'E', 'F'];
+        this.deptosEdificio = deptos.slice(0, deptos.indexOf(edificio.letter)+1)
+        
+
+        return `${edificio.address + ' - '+  edificio.location}`
     }
 
 
     confirmCart(){
+        const formCart = this.cartFormGroup.controls;
+        const formContact = this.contactFormGroup.controls;
+
+        
+
+        const filters: Order = {
+            cart: this.cart.map((product) =>{ return { id: product.id, price: product.price, quantity: 1 }}),
+            buildingId: formContact.buildingCtrl.value ?? undefined,
+            depto: formContact.deptoCtrl.value ?? undefined,
+            floor: formContact.floorCtrl.value ?? undefined,
+            phone: formContact.phoneCtrl.value ?? undefined,
+            observaciones: formContact.observacionesControl.value ?? '',
+            
+            //id: this.order?.id ?? 0,
+        }
+
+        console.log(filters);
+        
+
+        //if (!filters.legajo ) return;
+        /* this.overlayService.displayLoadingOverlay();
+        this.loading = true;
+
+        this.cartService.createOrder(filters).subscribe((data: Order) => {
+            this.snackBarService.open(`Se registro la compra.`, "Aceptar", 6000, "success-snackbar");
+            //this.empleado = data.Data;
+            setTimeout(() =>{
+                this.overlayService.hideLoadingOverlay();
+                this.loading = false;
+            }, 100);
+
+        }); */ 
 
     }
 
 
     modifyOrder() : void {
       
-        const formList = this.cartFormGroup.controls;
+        //const formList = this.cartFormGroup.controls;
 
-        const filters: Order = {
+        /* const filters: Order = {
             cart: this.cart,
             building: 'dnsdnoe',
             depto:'B',
@@ -178,7 +201,7 @@ export class ProductListComponent implements OnInit{
                 this.loading = false;
             }, 100);
 
-        });
+        }); */
     }
 
     /**

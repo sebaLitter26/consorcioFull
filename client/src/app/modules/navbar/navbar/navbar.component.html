@@ -3,7 +3,7 @@
         <div style="max-height: 90%; overflow-y: auto;">
             <mat-accordion>
                 <ng-container *ngFor="let navbarItem of navbarItems">
-                    <mat-expansion-panel class="mat-elevation-z0">
+                    <mat-expansion-panel class="mat-elevation-z0" *ngIf="navbarItem.navigationItems.length> 1; else singleNavItem">
                         <mat-expansion-panel-header>
                             <mat-panel-title>
                                 <i [ngClass]="navbarItem.icon"></i>&nbsp;
@@ -20,6 +20,16 @@
                             </ng-container>
                         </mat-nav-list>
                     </mat-expansion-panel>
+                    <ng-template #singleNavItem>
+                        <mat-nav-list>
+                            <ng-container *ngFor="let navigationItem of navbarItem.navigationItems">
+                                <a mat-list-item (click)="navigate(navigationItem)" [ngClass]="navigationItem.checked ? 'highlight' : ''">
+                                    <i [ngClass]="navigationItem.icon"></i>
+                                    {{ navigationItem.description }}
+                                </a>
+                            </ng-container>
+                        </mat-nav-list>
+                    </ng-template>
                 </ng-container>
             </mat-accordion>
         </div>

@@ -4,15 +4,25 @@ import { gql } from "apollo-angular";
 // query
 
 export const USERS = gql`
-    query users{
-        users{
-            id,
-            name
-            
+    query users($roles: [String]){
+        users(roles: $roles){
+          id,
+          name,
+          email,
+          rol,
+          picture,
+          isActive,
+          appartment { 
+            floor, 
+            letter, 
+            id
+          },
+          
         }
+      
     }
 `;
-
+/* 
 export const login = gql`
 query login($email: String!, $password: String!) {
   login(email: $email, password: $password) {
@@ -52,4 +62,4 @@ export const registerData = gql`
             }
         }
     }
-`;
+`; */

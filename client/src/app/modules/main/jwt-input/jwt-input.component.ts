@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { FormControl } from '@angular/forms';
-import { LOCAL_STORAGE_TOKEN } from 'src/app/modules/authentication/services/authentication.service';
+import { environment } from 'src/environments/environment';
 import { ProfileService } from 'src/app/modules/main/services/profile.service';
 
 @Component({
@@ -26,7 +26,7 @@ export class JwtInputComponent implements OnInit {
      * Guarda el token ingresado en el perfil del usuario y en el `localstorage`.
      */
     saveToken(): void {
-        this.profileService.user.token = this.tokenControl.value;
-        localStorage.setItem(LOCAL_STORAGE_TOKEN, this.tokenControl.value);
+        //this.profileService.user.token = this.tokenControl.value;
+        localStorage.setItem(environment.LOCAL_STORAGE_TOKEN, this.tokenControl.value);
     }
 }

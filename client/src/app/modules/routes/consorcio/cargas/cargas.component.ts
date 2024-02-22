@@ -1,14 +1,11 @@
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnInit} from '@angular/core';
-import { Appartment, Building, Owner, Tenant} from '../../model';
 import { ResourceService } from '../services/resource-control.service'
 import { Observable, Subject } from 'rxjs';
-import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { OverlayService } from '../../../overlay/services/overlay.service';
 import { SnackBarService } from 'src/app/services/snackbar.service';
 import { animate, style, transition, trigger } from '@angular/animations';
 import { ActivatedRoute, Router } from '@angular/router';
 import { ProfileService } from 'src/app/modules/main/services/profile.service';
-import { User } from '../../user';
 
 
 @Component({
@@ -49,9 +46,9 @@ export class CargasComponent implements OnInit{
     /* GProf$ : Observable<Nomina[]> = this.recursosService.getEmpleadoByLegajo(128346); */
    
 
-    building$: Observable<Building[]> = this.recursosService.getBuildings(); 
+    /* building$: Observable<Building[]> = this.recursosService.getBuildings(); 
     appartment$: Observable<Appartment[]> = this.recursosService.getAppartments(); 
-    user$: Observable<User[]> = this.recursosService.getUsers(); 
+    user$: Observable<User[]> = this.recursosService.getUsers();  */
 
 
     today = new Date();
@@ -76,6 +73,9 @@ export class CargasComponent implements OnInit{
     ) {}
 
     ngOnInit(): void {
+
+        this.changeTab(this.tabIndex);
+        
         /** Obtiene la lista de conteos precargada por el resolver */
         
     

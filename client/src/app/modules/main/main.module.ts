@@ -42,7 +42,7 @@ import { VersionService } from "./services/version.service";
         },
         {
             provide: MAT_DATE_LOCALE,
-            useValue: 'en-GB'
+            useValue: 'es-AR'//'en-GB'
         },
         VersionService,
         IPadService,

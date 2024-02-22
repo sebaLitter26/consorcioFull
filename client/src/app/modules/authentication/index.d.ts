@@ -11,7 +11,7 @@ export interface User {
     roles: string[];
     isActive: boolean;
     userId: string;  // usuario que creo este usuario.
-    lastUpdateBy: string; 
+    modifierId: string; 
 }
 
 export interface RegisterResult {

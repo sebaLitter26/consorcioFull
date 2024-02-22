@@ -19,7 +19,11 @@ export class BuildingDetailComponent implements OnInit {
     private activatedRoute: ActivatedRoute, 
     private router: Router,
     private changeDetectorRef: ChangeDetectorRef,
-  ) {}
+  ) {
+
+    console.log(this.activatedRoute.snapshot.queryParams);
+    
+  }
 
   mapRef: CustomCard[] = [
     {
@@ -72,7 +76,7 @@ private updateDashboard(){
   }
 
   backTobuildingsList(){
-    this.router.navigate(['/buildings/buildings-list']);
+    this.router.navigate(['consorcio/cargas',{ outlets: { carga: [`building/buildings-list`] } }] );
   }
   
 }

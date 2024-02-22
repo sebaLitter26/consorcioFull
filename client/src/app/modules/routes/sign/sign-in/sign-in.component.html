@@ -2,10 +2,6 @@
     <h1>Ingreso a AC</h1>
     <h3>Administracion de consorcios</h3>
 
-    
-
-    
-
     <div class="inputs-container">
         <!-- <app-cool-input 
             [icon]="'person'"
@@ -30,36 +26,14 @@
             
         ></app-cool-input> -->
 
-        <ng-container *ngIf="authService.isAuthenticated$ | async; else loggedOut">
-
-
-
-            <mat-card class="login-card" *ngIf="identification">
-                <mat-card-header>
-                    <mat-card-title-group>
-                        <mat-card-title>{{identification.nickname}}</mat-card-title>
-                        <mat-card-subtitle>{{identification.email}}</mat-card-subtitle>
-                        <img mat-card-avatar [src]="identification.picture" alt="identification.name">
-                    </mat-card-title-group>
-                    
-                </mat-card-header>
-                
-                <mat-card-content>
-                  <p *ngIf="identification.phone_number as phone">
-                    phone: {{phone}}
-                  </p>
-                </mat-card-content>
-                <mat-card-actions>
-                  
-                </mat-card-actions>
-            </mat-card>
+        <ng-container *ngIf="authenticationService.getIsAutenticated() | async; else loggedOut">
               
 
             <button
                 class="btn-large btn-round"
                 mat-flat-button
                 color="danger"
-                (click)="authService.logout({ logoutParams: { returnTo: document.location.origin } })">
+                (click)="logOut()">
                 Salir
             </button>
           </ng-container>
@@ -69,7 +43,7 @@
                 class="btn-large btn-round"
                 mat-flat-button
                 color="accent"
-                (click)="authService.loginWithPopup()">
+                (click)="authenticationService.login()">
                 Ingresar
             </button>
           </ng-template>

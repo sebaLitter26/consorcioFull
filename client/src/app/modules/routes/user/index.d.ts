@@ -1,4 +1,6 @@
-export type QrAction = "reprintQR" | "getFirstQR";
+//export type QrAction = "reprintQR" | "getFirstQR";
+
+import { Appartment } from "../model";
 
 
 export interface CustomCard<T> {
@@ -8,8 +10,23 @@ export interface CustomCard<T> {
     color: string;
 }
 
+export interface User {
+    id: string;
+    name: string;
+    modifierId?: String,
+  	rol: string;
+    phone?: string;
+    isActive: boolean;
+    email: string;
+    appartmentId?: string;
+    appartment?: Appartment;
+    notes?: string;
+    picture: string;
+    createdAt: string;
+    updatedAt: string;
+}
 
-
+/* 
 export interface Empleado {
     Foto: string;
     NombreApellido: string;
@@ -64,5 +81,5 @@ export interface FormUser {
     nombreequipo: string| null;
     tab: string| null;
   
-}
+} */
 

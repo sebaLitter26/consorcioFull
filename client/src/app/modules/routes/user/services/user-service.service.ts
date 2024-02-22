@@ -3,10 +3,10 @@ import { Injectable } from "@angular/core";
 import { Apollo } from "apollo-angular";
 import { delay, map, Observable, of, share, take, tap } from "rxjs";
 import { environment } from "src/environments/environment";
-import { User, FormUser } from "..";
+import { User } from "..";
 import { USERS } from "./graphql";
 
-const DEFAULT_WEB_FILTERS: FormUser = {
+/* const DEFAULT_WEB_FILTERS: FormUser = {
     legajo: null,
     sucursalsolicitante: null,
     fecha: null,
@@ -29,7 +29,7 @@ const DEFAULT_WEB_FILTERS: FormUser = {
     nombreusuario: '',
     nombreequipo: '',
     tab: '',
-}
+} */
 
 
 
@@ -52,7 +52,7 @@ export class UserService {
      * @returns un `Observable` con el listado de Sectores
      */
     getUsers(): Observable<User[]> {
-        const filters = {}
+        const filters = {roles: []}
         return this.apollo.watchQuery({
             query: USERS,
             variables: filters,

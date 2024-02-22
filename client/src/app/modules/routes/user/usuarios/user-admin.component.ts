@@ -5,8 +5,8 @@ import { OverlayService } from '../../../overlay/services/overlay.service';
 import { SnackBarService } from 'src/app/services/snackbar.service';
 import { animate, style, transition, trigger } from '@angular/animations';
 import { UserService } from '../services/user-service.service';
-import { FormUser, User } from '..';
-import { CustomCellComponent, DynamicComponent, DynamicTableDefinition } from '../../../ui/dynamic-table';
+import {  User } from '..';
+import {  DynamicComponent, DynamicTableDefinition } from '../../../ui/dynamic-table';
 import { PluImageComponent } from '../../../common/plu-image/plu-image.component';
 import { StringSplitterData } from '../../../common';
 
@@ -67,27 +67,25 @@ export class UserAdminComponent{
         displayedColumns: [
             'id',
             'habilitado',
-            'nombre',
-            'legajo',
-            'ntuser',
-            'foto',
-            'fupdate',
-            'finsert',
-            'id_rol',
-            'habilitado_rol',
+            'name',
+            'email',
+            'phone',
+            'picture',
+            'updatedAt',
+            'createdAt',
+            'rol',
 
         ],
         headerCellDefinitions: [
             'ID',
             'HABILITADO',
-            'NOMBRE Y APELLIDO',
-            'LEGAJO',
-            'NT USUARIO',
+            'NOMBRE',
+            'EMAIL',
+            'TELEFONO',
             'FOTO',
             'F ACTUALIZACIÓN',
             'F ALTA',
             'ROL',
-            'ROL HABILITADO',
         ],
     }
 
@@ -97,7 +95,7 @@ export class UserAdminComponent{
         {
             type: PluImageComponent,
             componentData: <StringSplitterData>{
-                propertyPath: 'foto',
+                propertyPath: 'picture',
             },
         },
          
@@ -106,27 +104,25 @@ export class UserAdminComponent{
     /** Formatos custom para columnas del listado de control seleccionado. */
     columnFormaters: (((control: User) => string | number | boolean) | null)[] = [
         null,
-        (item: User) => {
-            return `${item.habilitado ? '' : 'in'}habilitado`;
+        (user: User) => {
+            return `${user.isActive ? '' : 'in'}habilitado`;
         }, 
-        (item: User) => {
-            return `${item.nombre + ' ' + item.apellido}`;
-        }, null,null, null,
-        (item: User) => {
-            const date: Date = new Date(item?.fupdate);
+        null, null,null, null,
+        (user: User) => {
+            const date: Date = new Date(user?.updatedAt);
             const formatedDate: string = `${date?.toLocaleDateString()} ${date?.toLocaleTimeString()}`;
 
-            return `${formatedDate == "Invalid Date" ? item.fupdate : formatedDate}`;
+            return `${formatedDate == "Invalid Date" ? user.updatedAt : formatedDate}`;
         },
-        (item: User) => {
-            const date: Date = new Date(item?.finsert);
+        (user: User) => {
+            const date: Date = new Date(user?.createdAt);
             const formatedDate: string = `${date?.toLocaleDateString()} ${date?.toLocaleTimeString()}`;
 
-            return `${formatedDate == "Invalid Date" ? item.finsert : formatedDate}`;
+            return `${formatedDate == "Invalid Date" ? user.createdAt : formatedDate}`;
         },null,
-        (item: User) => {
-            return `${item.habilitado_rol ? '' : 'no '}tiene`;
-        }
+        /* (user: User) => {
+            return `${user.rol ? '' : 'no '}tiene`;
+        } */
         
     ];
 
@@ -184,7 +180,7 @@ export class UserAdminComponent{
 
     searchUser() : void {
 
-        const formList = this.formUserListGroup.controls;
+        /* const formList = this.formUserListGroup.controls;
 
         const filters: FormUser = {
             legajo: formList.legajoControl.value,
@@ -209,7 +205,7 @@ export class UserAdminComponent{
             nombreusuario: '',
             nombreequipo: '', 
             tab: '',
-        }
+        } */
 
         //if (!filters.legajo ) return;
         this.overlayService.displayLoadingOverlay();

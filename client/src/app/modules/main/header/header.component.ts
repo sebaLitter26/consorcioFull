@@ -15,6 +15,7 @@ import { environment } from 'src/environments/environment';
 import { SandboxService } from 'src/app/services/sandbox.service';
 import { AuthorizationService } from '../../authorization/services/authorization.service';
 import { ApiData } from '..';
+import { AuthenticationService } from '../../authentication/services/authentication.service';
 
 @Component({
     selector: 'app-header',
@@ -53,7 +54,7 @@ export class HeaderComponent implements OnInit {
         private snackBarService: SnackBarService,
         private appThemeService: AppThemeService,
         public sandboxService: SandboxService,
-        private authorizationService: AuthorizationService,
+        private authenticationService: AuthenticationService,
     ) {}
 
     ngOnInit(): void {
@@ -91,6 +92,7 @@ export class HeaderComponent implements OnInit {
 
         dialogRef.afterClosed().subscribe(data => {
             if (data) {
+                this.authenticationService.logOut()
                 this.router.navigate(['sign/in']);
             }
         });

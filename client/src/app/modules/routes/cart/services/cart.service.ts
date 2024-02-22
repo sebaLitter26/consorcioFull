@@ -1,17 +1,22 @@
-import { HttpClient } from "@angular/common/http";
+import { Apollo } from 'apollo-angular';
 import { Injectable } from "@angular/core";
-import { delay, Observable, of, share, take, tap } from "rxjs";
-import { Building, Order,  } from "../../model";
-import { environment } from "src/environments/environment";
+import { map, Observable, of } from "rxjs";
+import { Building, BuildingListFilters } from '../../consorcio/cargas/building';
+import { BUILDINGS } from '../../consorcio/cargas/building/services/building.graphql';
+import { Order, Product } from '..';
+import { ORDERS, PRODUCTS } from './graphql';
 
-const DEFAULT_WEB_FILTERS: any = {
-    legajo: null,
-    sucursalsolicitante: null,
-    fecha: null,
-    sector: null,
- 
-    id: 0
+const DEFAULT_BUILDING_FILTERS: BuildingListFilters = {
+    address: null,
+    location: null,
+    floors: null
 }
+
+/* const DEFAULT_PRODUCT_FILTERS: ProductListFilters = {
+    address: null,
+    location: null,
+    floors: null
+} */
 
 
 
@@ -19,7 +24,8 @@ const DEFAULT_WEB_FILTERS: any = {
 export class CartService {
 
     constructor(
-        private http: HttpClient,
+        
+        public apollo: Apollo,
     ) {}
 
 
@@ -30,22 +36,52 @@ export class CartService {
     }
 
     /**
-     * Obtiene el listado de edificios.
-     * @returns un `Observable` con el listado de Edificios
+     * Obtiene el listado de Products
+     * @returns un Observable con el listado de products 
      */
-    getBuildings(): Observable<Building[]> {
-        return this.http.get<Building[]>(`${environment.apiUrl}buildings`).pipe(take(1));
+    getProducts(): Observable<Product[]>{
+        return this.apollo.watchQuery({
+            query: PRODUCTS,
+            //variables: DEFAULT_PRODUCT_FILTERS,
+            fetchPolicy: 'network-only'
+        }).valueChanges.pipe(map((result: any) => result.data.products));
+    }
+
+    getOrdersByAppartment(appartmentId: string) {
+        console.log('getOrdersByAppartment', appartmentId);
         
+        return this.apollo.watchQuery({
+            query: ORDERS,
+            variables: {appartmentId},
+            fetchPolicy: 'network-only'
+        }).valueChanges.pipe(map((result: any) => result.data.products));
+
+    }
+
+    /**
+     * Obtiene el listado de buildings
+     * @returns un Observable con el listado de buildings 
+     */
+    getBuildings(): Observable<Building[]>{
+        return this.apollo.watchQuery({
+            query: BUILDINGS,
+            variables: DEFAULT_BUILDING_FILTERS,
+            fetchPolicy: 'network-only'
+        }).valueChanges.pipe(map((result: any) => result.data.buildings));
+    
+        //return this.http.post<Building[]>(`${environment.apiUrl}/getbuildings`, filters);
     }
 
     getOrdersByPhone(phone: number): Observable<Order[]> {
-        return this.http.get<Order[]>(`${environment.apiUrl}/getOrdersByPhone?PHONE=${phone}`).pipe(take(1), share());
+        return of([]);
+        //this.http.get<Order[]>(`${environment.apiUrl}/getOrdersByPhone?PHONE=${phone}`).pipe(take(1), share());
         
     }
 
     createOrder(order: Order): Observable<Order> {
-        const updateCreate =(order.id>0) ? 'UpdateOrder' : 'InsertOrder';
-        return this.http.post<Order>(`${environment.apiUrl}/${updateCreate}`, order);
+        //const updateCreate =(order.id>0) ? 'UpdateOrder' : 'InsertOrder';
+        return of()
+        //this.http.post<Order>(`${environment.apiUrl}/${updateCreate}`, order);
         
     }
 

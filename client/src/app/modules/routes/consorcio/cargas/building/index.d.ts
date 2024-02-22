@@ -1,3 +1,4 @@
+import { Appartment } from "../../../model";
 import { BuildingSerialState, BuildingState, BuildingStateType, BuildingType } from "./model";
 
 export type ActionName = "update" | "delete" | "detail";
@@ -14,7 +15,7 @@ export interface Building {
     id: string
     floors: number
     letter: string 
-    appartments: any[]
+    appartments: Appartment[]
     createdAt: string 
     updatedAt: string
     address: string

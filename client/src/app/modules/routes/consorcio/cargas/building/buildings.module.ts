@@ -33,12 +33,12 @@ const routes: Routes = [
     { 
         path: 'building',
         component: BuildingDetailComponent,
-        resolve: {BuildingDetail: BuildingDetailResolver},
+        //resolve: {BuildingDetail: BuildingDetailResolver},
         data: { animation: 'isRight' } 
     },
     {
         path: '',
-        redirectTo: 'buildings-list',
+        redirectTo: 'buildings-list', //http://localhost:4200/#/consorcio/cargas/(carga:building/buildings-list)
         pathMatch: 'full'
     },
 ];

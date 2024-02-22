@@ -1,22 +1,24 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject, Observable } from 'rxjs';
-import { User } from '..';
+
+import { environment } from 'src/environments/environment';
+import { User } from '../../routes/user';
 
 
 const EMPTY_USER: User = {
-    id: 0,
-    firstName: "",
-    lastName: "",
-    photo: "",
+
+    id: '',
+    name: '',
+    modifierId: undefined,
+  	rol: '',
+    picture: '',
+    phone: '',
+    isActive: false,
     email: '',
+    appartment: undefined,
+    notes: '',
     createdAt: '',
-    deletedAt: null,
-    provider: '',  // social network
-    role: null,
-    updatedAt: '',
-    status: null,
-    socialId: '',
-    token: '',
+    updatedAt: ''
     //permisos: [],
 }
 
@@ -51,30 +53,16 @@ export class ProfileService {
      * @returns el token
      */
     get token(): string {
-        return this.user.token;
+        return this.user.id;
     }
 
     /**
      * Inicializa el usuario en memoria para ser usado a lo largo de toda la aplicación, mediante una instancia de este servicio.
      * @param user el usuario
      */
-    setupUser(user: User): void {
-        console.log(user);
-        
+    setupUser(user: User, token:string): void {
+        localStorage.setItem(environment.LOCAL_STORAGE_TOKEN, token);
         this.user = user;
-        /* this.user = {
-            id: 0,
-            estado: user.estado,
-            habilitado: user.habilitado,
-            nombre: user.nombre,
-            apellido: user.apellido,
-            legajo: user.legajo,
-            password: user.password,
-            token: user.token,
-            fotourl: user.fotourl,
-            permisos: user.permisos,
-            usuariont: user.usuariont
-        } */
     }
 
     /**
@@ -82,6 +70,8 @@ export class ProfileService {
      */
     killUser(): void {
         this._user.next(EMPTY_USER);
+        localStorage.removeItem(environment.LOCAL_STORAGE_TOKEN);
+        
     }
 
     /**

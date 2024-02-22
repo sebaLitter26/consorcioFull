@@ -13,7 +13,7 @@ const routes: Routes = [
     {
         path: 'cart',
         loadChildren: () => import('./cart/product-list.module').then(m => m.ProductListModule),
-        //canActivate: [ AuthorizationGuard ],
+        canActivate: [ AuthorizationGuard ],
     },
     {
         path: 'development',
@@ -27,7 +27,7 @@ const routes: Routes = [
     },
     {
         path: '',
-        redirectTo: '/cart/product-list',
+        redirectTo: '/consorcio/cargas',   // primer pantalla que carga despues de loguear
         pathMatch: 'full'
     },
 ];

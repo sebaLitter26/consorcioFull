@@ -6,8 +6,8 @@ import { AuthenticationService } from 'src/app/modules/authentication/services/a
 import { ProfileService } from 'src/app/modules/main/services/profile.service';
 import { OverlayService } from 'src/app/modules/overlay/services/overlay.service';
 import { SnackBarService } from 'src/app/services/snackbar.service';
-import { CustomCard, Empleado, QrAction } from '..';
-const CUSTOM_CARD_MAP: CustomCard<Empleado>[] = [
+import { CustomCard, User } from '..';
+const CUSTOM_CARD_MAP: CustomCard<any>[] = [
   {
     header: 'Antigüedad',
     icon: 'fas fa-clock',
@@ -28,10 +28,10 @@ const CUSTOM_CARD_MAP: CustomCard<Empleado>[] = [
 })
 export class ProfileDetailComponent implements OnInit {
 
-   @Input() empleado: Empleado[] | null = null;
+   //@Input() empleado: Empleado[] | null = null;
 
   mapRef = CUSTOM_CARD_MAP;
-  qrAction!: QrAction;
+
   qrActionButton!: string;
 
   constructor(

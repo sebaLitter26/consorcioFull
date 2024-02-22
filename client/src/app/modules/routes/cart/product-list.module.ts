@@ -23,7 +23,7 @@ const routes: Routes = [
     {
         path: 'product-list',
         component: ProductListComponent,
-        //resolve: {empleadoDetail: ProductDetailResolver},
+        resolve: {cartDetail: ProductDetailResolver},
         data: { animation: 'isRight' } 
     },
     {
@@ -33,7 +33,7 @@ const routes: Routes = [
     }, 
     {
         path: '',
-        redirectTo: '/product-list',
+        redirectTo: 'product-list',
         pathMatch: 'full'
     },
 ]

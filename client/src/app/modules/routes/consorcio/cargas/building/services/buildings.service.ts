@@ -119,6 +119,9 @@ export class BuildingService {
             id: buildingId
         } */
 
+        console.log("buildingId", buildingId);
+        
+
         return this.apollo.mutate({
             mutation: BUILDING,
             variables: {id: buildingId},

@@ -46,7 +46,10 @@ export class BuildingActionsComponent implements CustomCellComponent, OnInit {
     switch(action.name)
     {
       case('detail'):{
-        this.router.navigate(['/buildings/building'], {queryParams: {id: this.data?.id}} );
+
+        
+        
+        this.router.navigate(['consorcio/cargas',{ outlets: { carga: [`building/building`] }, queryParams: {id: this.data?.id} }] );
         break;
       }
       case('update'):{
@@ -112,10 +115,8 @@ export class BuildingActionsComponent implements CustomCellComponent, OnInit {
   private getAllBuildingActions(): BuildingAction[]{
     const actions: BuildingAction[] = [
       {name: 'detail', title: 'Ver detalle', icon: 'info', permission: 'buildings_ver-detalle', availableStates: []},
-        {name: 'update', title: 'Modificar edificio', icon: 'announcement', permission: 'buildings_informar-building', 
-          availableStates: [BuildingState.CREADO]},
-        {name: 'delete', title: 'Borrar edificio', icon: 'cancel', color: '#F08080',  permission: 'buildings_cancelar-building',
-          availableStates: []},
+      {name: 'update', title: 'Modificar edificio', icon: 'announcement', permission: 'buildings_informar-building',availableStates: [BuildingState.CREADO]},
+      {name: 'delete', title: 'Borrar edificio', icon: 'cancel', color: '#F08080',  permission: 'buildings_cancelar-building',availableStates: []},
     ];
     return actions;
   }

@@ -61,8 +61,8 @@ const routes: Routes = [
     ],
     providers: [
         DatePipe,
-        LegajoDetailResolver,
+        //LegajoDetailResolver,
         ResourceService,
     ]
 })
-export class ConsorcioModule { }
+export class ConsorcioModule {}

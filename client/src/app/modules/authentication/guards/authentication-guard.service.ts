@@ -2,7 +2,6 @@ import { HttpErrorResponse } from "@angular/common/http";
 import { Injectable } from "@angular/core";
 import { ActivatedRouteSnapshot, CanActivate, CanLoad, Route, Router, RouterStateSnapshot, UrlSegment, UrlTree } from "@angular/router";
 import { BehaviorSubject, Observable, Subject, switchMap } from "rxjs";
-import { User } from "../../main";
 import { ProfileService } from "../../main/services/profile.service";
 import { AuthenticationService } from "../services/authentication.service";
 

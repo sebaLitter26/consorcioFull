@@ -2,13 +2,14 @@ import { HttpErrorResponse } from '@angular/common/http';
 import { Component, OnInit, Inject } from '@angular/core';
 import { FormBuilder, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
-import { AuthenticationService, LOCAL_STORAGE_TOKEN } from 'src/app/modules/authentication/services/authentication.service';
+import { AuthenticationService } from 'src/app/modules/authentication/services/authentication.service';
+import { environment } from 'src/environments/environment';
 
 import { ProfileService } from 'src/app/modules/main/services/profile.service';
 import { SnackBarService } from 'src/app/services/snackbar.service';
-import { SignInResponse } from '../../../main';
-import { User, AuthService, IdToken } from '@auth0/auth0-angular';
+
 import { DOCUMENT } from '@angular/common';
+import { User } from '../../user';
 
 @Component({
     selector: 'app-sign-in',
@@ -40,18 +41,18 @@ export class SignInComponent implements OnInit {
 
     /** Flag que indica si se está realizando una petición. */
     fetching: boolean = false;
-    identification: IdToken | null = null;
+    //identification: IdToken | null = null;
     isAuthenticated = false;
 
     constructor(
-        private authenticationService: AuthenticationService,
+        public authenticationService: AuthenticationService,
         private snackBarService: SnackBarService,
         private router: Router,
         private activatedRoute: ActivatedRoute, 
         private profileService: ProfileService,
         private fb: FormBuilder,
         @Inject(DOCUMENT) public document: Document, 
-        public authService: AuthService
+        
     ) {}
 
     ngOnInit(): void {
@@ -74,22 +75,16 @@ export class SignInComponent implements OnInit {
             
           }); */
 
-        this.authService.idTokenClaims$.subscribe(token => {
+        this.authenticationService.getOAuthUser().subscribe(token => {
             
             if(token){
-                this.identification = token;
                 
                 this.fetching = true;
-                this.authenticationService.OAuthLogin(this.identification.__raw).subscribe({
-                    next:(user: SignInResponse) => {
+                this.authenticationService.OAuthLogin(token.__raw).subscribe({
+                    next:(user: User) => {
                         this.fetching = false;
-                        console.log('backSession response',user);
                         
-                        
-                        localStorage.setItem(LOCAL_STORAGE_TOKEN, user.token ?? "");
-                        this.profileService.setupUser(user.user);
-                        
-                        //this.router.navigate([""]);
+                        this.router.navigate([""]);
                     },
                     error:(error: HttpErrorResponse) => {
                         this.fetching = false;
@@ -121,6 +116,11 @@ export class SignInComponent implements OnInit {
             });
         }
     } */
+
+    logOut(){
+        
+        
+    }
 
 
     backSession(identification:User): void {

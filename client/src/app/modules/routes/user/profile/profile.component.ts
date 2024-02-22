@@ -1,8 +1,8 @@
-import { AfterViewInit, Component, Input, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
 import { Observable, of } from 'rxjs';
-import { map } from 'rxjs/operators';
 import { ProfileService } from 'src/app/modules/main/services/profile.service';
-import { Empleado, IPadService } from 'src/app/services/ipad.service';
+import { User } from '..';
+
 
 @Component({
     selector: 'app-profile',
@@ -12,9 +12,10 @@ import { Empleado, IPadService } from 'src/app/services/ipad.service';
 export class ProfileComponent  {
 
     /** El Perfil del usuario a mostrar. */
-    //empleado$: Observable<Empleado[]>;
+    identification$: Observable<User> = this.profileService.userChangeEvent();
 
-    constructor(private ipadService: IPadService, private profileService: ProfileService) {
+    constructor(public profileService: ProfileService) {
+   
         /* this.empleado$ = this.ipadService.getEmployee(+this.profileService.user.mail).pipe(
             map((empleados:any) => {
                 //if(!empleados.Empleado || empleados.listaEmpleados < 1) return [];
