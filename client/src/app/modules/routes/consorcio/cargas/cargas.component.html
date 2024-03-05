@@ -9,33 +9,24 @@
     </div>
     
     <!-- <h1>Carga de datos</h1> -->
-    <mat-tab-group (selectedTabChange)="changeTab($event.index)">
-        <mat-tab label="Edificio" >
-
-            <!-- <app-building></app-building> -->
-                
-        
-        </mat-tab>
-        <mat-tab label="Departamento" >
-
-            <!-- <app-appartment></app-appartment> -->
-            
-        </mat-tab>
-
-        <mat-tab label="Propietario" >
-
-            <!-- <app-owner></app-owner> -->
-          
-        </mat-tab>
-        <mat-tab label="Inquilino" >
-
-            <!-- <app-tenant></app-tenant> -->
-            
-        </mat-tab>
-
-        
+    <mat-tab-group (selectedTabChange)="cargasService.tabIndex = $event.index">
+        <mat-tab label="Edificio" ></mat-tab>
+        <mat-tab label="Departamento"></mat-tab>
+        <mat-tab label="Clientes"></mat-tab>
+        <mat-tab label="Productos"></mat-tab>
     </mat-tab-group>
-    <router-outlet name="carga"></router-outlet>
+
+    <div>
+    @switch(cargasService.tabIndex) {
+        @case(0) {  <app-buildings-list></app-buildings-list> }       
+            
+        @case(1) {  <app-appartment-list></app-appartment-list> }
+            
+        @case(2) {   <app-client-list></app-client-list> }
+        
+        @case(3) {   <app-product-list></app-product-list>}
+    }
+    </div>
         
 
 </main>

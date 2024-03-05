@@ -8,7 +8,7 @@ query products{
   products{
     id
     name
-    picture
+    images
     price
     stock
     brand
@@ -27,7 +27,7 @@ export const ORDERS = gql`
           name,
           email,
           rol,
-          picture,
+          images,
           isActive,
           appartment { 
             floor, 

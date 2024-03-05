@@ -1,0 +1,42 @@
+<main>
+
+    <div class="header" role="header">
+        <h1>Gestión de productos</h1>
+        <button appRoundButton mat-flat-button color="primary" class="btn btn-primary" (click)="openDialogCreateProduct()">
+            <mat-icon>add</mat-icon> Agregar producto
+        </button>
+    </div>
+
+    <section class="table-container" *ngIf="product$ | async as products">
+        
+        <app-dynamic-table *ngIf="products.length > 0; else tableLoader"
+            [borderRadius]="'10px'"
+            [data]="products"
+            [tableDefinition]="tableDefinition"
+            [columnStyles]="columnStyles"
+            [columnFormaters]="columnFormaters"
+            [customColumnComponents]="customComponents"
+            [useFilters]="true"
+            [useSorting]="true"
+            [useAutoComplete]="true"
+            [notFilteredColumns]="[0,2,3,5]"
+            [updateSource]="productUpdateSource.asObservable()"
+            [usePagination]="true"
+            [pageSize]="15"
+        ></app-dynamic-table>
+        <ng-template #tableLoader>
+            <app-table-loader *ngIf="loading; else tableNoResult"
+                [backgroundColor]="'var(--color-card-fade)'"
+                [borderRadius]="'4px'"
+                [columns]="8"
+                [rows]="1"
+            ></app-table-loader>
+            <ng-template #tableNoResult>
+                <p class="no-results">NO SE ENCONTRARON PRODUCTOS</p>
+            </ng-template>
+            
+        </ng-template>
+        
+    </section>
+
+</main>

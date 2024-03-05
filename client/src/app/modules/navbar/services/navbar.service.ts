@@ -99,7 +99,7 @@ export class NavbarService {
             operations.navigationItems.push({
                 description: 'Carga de datos',
                 icon: 'fa fa-fw fa-tasks',
-                route: 'consorcio/cargas',
+                route: 'consorcio',
                 checked: false,
             });
         }

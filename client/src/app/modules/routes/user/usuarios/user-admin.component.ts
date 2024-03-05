@@ -3,12 +3,12 @@ import { Subject } from 'rxjs';
 import { FormBuilder, Validators } from '@angular/forms';
 import { OverlayService } from '../../../overlay/services/overlay.service';
 import { SnackBarService } from 'src/app/services/snackbar.service';
-import { animate, style, transition, trigger } from '@angular/animations';
 import { UserService } from '../services/user-service.service';
 import {  User } from '..';
 import {  DynamicComponent, DynamicTableDefinition } from '../../../ui/dynamic-table';
 import { PluImageComponent } from '../../../common/plu-image/plu-image.component';
 import { StringSplitterData } from '../../../common';
+import { detailExpand, hoverExpand, inOutAnimation, rotate } from 'src/app/modules/routes/animations';
 
 
 @Component({
@@ -16,29 +16,7 @@ import { StringSplitterData } from '../../../common';
     templateUrl:'./user-admin.component.html',
     styleUrls: ['./user-admin.component.scss'],
     changeDetection: ChangeDetectionStrategy.OnPush,
-    animations: [
-        trigger(
-          'inOutAnimation', 
-          [
-            transition(
-              ':enter', 
-              [
-                style({ height: 0, opacity: 0 }),
-                animate('1s ease-out', 
-                        style({ height: 300, opacity: 1 }))
-              ]
-            ),
-            transition(
-              ':leave', 
-              [
-                style({ height: 300, opacity: 1 }),
-                animate('1s ease-in', 
-                        style({ height: 0, opacity: 0 }))
-              ]
-            )
-          ]
-        )
-    ]
+    animations: [inOutAnimation]
 })
 export class UserAdminComponent{
 
@@ -71,6 +49,7 @@ export class UserAdminComponent{
             'email',
             'phone',
             'picture',
+            'appartment',
             'updatedAt',
             'createdAt',
             'rol',
@@ -83,6 +62,7 @@ export class UserAdminComponent{
             'EMAIL',
             'TELEFONO',
             'FOTO',
+            'DEPARTAMENTO',
             'F ACTUALIZACIÓN',
             'F ALTA',
             'ROL',
@@ -101,6 +81,7 @@ export class UserAdminComponent{
          
     ];
 
+
     /** Formatos custom para columnas del listado de control seleccionado. */
     columnFormaters: (((control: User) => string | number | boolean) | null)[] = [
         null,
@@ -109,13 +90,16 @@ export class UserAdminComponent{
         }, 
         null, null,null, null,
         (user: User) => {
-            const date: Date = new Date(user?.updatedAt);
-            const formatedDate: string = `${date?.toLocaleDateString()} ${date?.toLocaleTimeString()}`;
-
-            return `${formatedDate == "Invalid Date" ? user.updatedAt : formatedDate}`;
+            return `${user.appartment ? (user.appartment.floor>0 ? user.appartment.floor : 'PB') +' - ' +user.appartment.letter  : 'Sin asignar'}`;
         },
         (user: User) => {
-            const date: Date = new Date(user?.createdAt);
+            const date: Date = new Date(user?.updatedAt);
+            const formatedDate: string = `${date?.toLocaleDateString()} ${date?.toLocaleTimeString()}`;
+            
+            return `${date+'' == "Invalid Date" ? user.updatedAt : formatedDate}`;
+        },
+        (user: User) => {
+            const date: Date = new Date(+user?.createdAt);
             const formatedDate: string = `${date?.toLocaleDateString()} ${date?.toLocaleTimeString()}`;
 
             return `${formatedDate == "Invalid Date" ? user.createdAt : formatedDate}`;

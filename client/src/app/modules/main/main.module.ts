@@ -3,8 +3,6 @@ import { NgModule } from "@angular/core";
 import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 import { MAT_DATE_LOCALE } from "@angular/material/core";
 import { HttpInterceptorService } from "src/app/services/http-interceptor.service";
-import { IpService } from "src/app/services/ip.service";
-import { IPadService } from "src/app/services/ipad.service";
 import { AuthorizationModule } from "../authorization/authorization.module";
 import { NavbarModule } from "../navbar/navbar.module";
 import { OverlayModule } from "../overlay/overlay.module";
@@ -22,8 +20,7 @@ import { VersionService } from "./services/version.service";
         MainRoutingModule,
         SharedModule,
         NavbarModule,
-        //DialogsModule,
-        //HttpClientModule,
+        DialogsModule,
         DeviceModule,
         OverlayModule,
         AuthorizationModule,
@@ -45,8 +42,6 @@ import { VersionService } from "./services/version.service";
             useValue: 'es-AR'//'en-GB'
         },
         VersionService,
-        IPadService,
-        IpService,
     ]
 })
 export class MainModule {}

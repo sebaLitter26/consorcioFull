@@ -2,7 +2,7 @@ import { HttpErrorResponse, HttpEvent, HttpHandler, HttpInterceptor, HttpRequest
 import { Injectable } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { of, Observable, iif, throwError } from 'rxjs';
-import { catchError, map, switchMap, tap } from 'rxjs/operators';
+import { catchError, map, switchMap, tap, timeout } from 'rxjs/operators';
 import { ExpiredSessionDialogComponent } from '../modules/authentication/expired-session-dialog/expired-session-dialog.component';
 import { ProfileService } from '../modules/main/services/profile.service';
 import { RRHHResponse } from '../modules/model';
@@ -61,7 +61,7 @@ export class HttpInterceptorService implements HttpInterceptor {
         let authReq;
         let headers: HttpHeaders;
 
-        console.log("INTERCEPTOR");
+        
         
         if (!this._excludedUrl(req.url, EXCLUDED_API_URLS)) {
             //authReq;
@@ -84,6 +84,7 @@ export class HttpInterceptorService implements HttpInterceptor {
             }
 
             return next.handle(authReq).pipe(
+                timeout(15000),
                 switchMap((event: HttpEvent<any>) => iif(() => event instanceof HttpResponse && event.status == 200 && !(<RRHHResponse>(event.body)).status.ok,
                     throwError(()=>new HttpErrorResponse({
                         error: (<RRHHResponse>((<HttpResponse<any>>event).body)),

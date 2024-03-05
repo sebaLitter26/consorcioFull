@@ -1,5 +1,5 @@
 <main>
-    <h1>Reporte de Psicotécnicos</h1>
+    <h1>Reporte de Pedidos</h1>
 
     <form [formGroup]="formRenditionListGroup" >
 
@@ -7,7 +7,7 @@
         <section class="filters-container" >
 
             <mat-form-field appearance="fill" color="primary" >
-                <mat-label>Fecha del Psicotécnico</mat-label>
+                <mat-label>Fecha del Pedido</mat-label>
                 <mat-date-range-input [rangePicker]="deliveryDate" [max]="today">
                     <input matStartDate placeholder="" formControlName="fechaDesdeControl"  name="deliveryDateFrom" autocomplete="off">
                     <input matEndDate placeholder="" formControlName="fechaHastaControl" name="deliveryDateTo" autocomplete="off">
@@ -71,15 +71,9 @@
     </form>
 
     <section class="mat-elevation-z4">
-        <mat-accordion>
-            <mat-expansion-panel [expanded]="true">
-                <mat-expansion-panel-header>
-                    <mat-panel-title>Psicotécnicos</mat-panel-title>
-                    <mat-panel-description></mat-panel-description>
-                </mat-expansion-panel-header>
+        
 
-                <app-dynamic-table 
-                    *ngIf="orders && orders.length > 0; else noOrders"
+                <app-dynamic-table *ngIf="orders && orders.length > 0; else noOrders"
                     [data]="orders"
                     [tableDefinition]="tableDefinition"
                     [columnFormaters]="columnFormaters"
@@ -93,10 +87,9 @@
                 </app-dynamic-table>
 
             <ng-template #noOrders>
-                <h2 class="empty-message">No hay Psicotecnicos</h2>
+                <h2 class="empty-message">No hay pedidos</h2>
             </ng-template>
-        </mat-expansion-panel>
-        </mat-accordion>
+       
     </section>
     
 

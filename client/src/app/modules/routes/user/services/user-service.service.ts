@@ -52,7 +52,7 @@ export class UserService {
      * @returns un `Observable` con el listado de Sectores
      */
     getUsers(): Observable<User[]> {
-        const filters = {roles: []}
+        const filters = {roles:['admin','tenant','owner']}   // Sacar admin para que no se vea ese User
         return this.apollo.watchQuery({
             query: USERS,
             variables: filters,

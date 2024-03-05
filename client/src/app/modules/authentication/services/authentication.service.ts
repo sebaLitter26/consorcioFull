@@ -18,7 +18,7 @@ export class AuthenticationService {
       private profileService: ProfileService,
       private authService: AuthService,
       //private encryptService: EncryptService,
-      private http: HttpClient
+      //private http: HttpClient
   ) { }
 
   /**
@@ -49,9 +49,9 @@ export class AuthenticationService {
    * Inicia sesión con el token del usuario.
    * @returns un `Observable` con un `SignInResponse` que tiene toda la información del usuario
    */
-  tokenSignIn() : Observable<User | null> {
-      const savedToken: string | null = localStorage.getItem(environment.LOCAL_STORAGE_TOKEN);
-      if(!savedToken) return of(null);
+  tokenSignIn() : Observable<User> {
+      const savedToken: string = localStorage.getItem(environment.LOCAL_STORAGE_TOKEN) ?? '';
+      //if(!savedToken) return of(null);
       return this.OAuthLogin(savedToken);
   }
       /* this.getOAuthUser().subscribe(token => {
@@ -119,7 +119,7 @@ export class AuthenticationService {
 
   // Login
   login(){
-    this.authService.loginWithPopup();
+    this.authService.loginWithRedirect() //loginWithPopup();
   }
 
   /**
@@ -151,7 +151,7 @@ export class AuthenticationService {
 
 
   logOut(){
-    this.authService.logout({ logoutParams: { returnTo: document.location.origin } });
+    this.authService.logout({ logoutParams: { returnTo: `${document.location.origin}/sign` }});
     this.profileService.killUser();
     
   }

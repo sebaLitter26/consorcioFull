@@ -12,35 +12,15 @@ import { Router } from '@angular/router';
 import { StringShowMore } from 'src/app/modules/common/string-show-more/string-show-more.component';
 import { StringShowMoreData, StringSplitterData } from 'src/app/modules/common';
 import { PluImageComponent } from '../../../common/plu-image/plu-image.component';
+import { detailExpand, hoverExpand, inOutAnimation, rotate } from 'src/app/modules/routes/animations';
+
 
 @Component({
     selector: 'app-orders-history',
     templateUrl: './orders-history.component.html',
     styleUrls: ['./orders-history.component.scss'],
     changeDetection: ChangeDetectionStrategy.OnPush,
-    animations: [
-        trigger(
-          'inOutAnimation', 
-          [
-            transition(
-              ':enter', 
-              [
-                style({ height: 0, opacity: 0 }),
-                animate('1s ease-out', 
-                        style({ height: 300, opacity: 1 }))
-              ]
-            ),
-            transition(
-              ':leave', 
-              [
-                style({ height: 300, opacity: 1 }),
-                animate('1s ease-in', 
-                        style({ height: 0, opacity: 0 }))
-              ]
-            )
-          ]
-        )
-    ]
+    animations: [inOutAnimation]
 })
 export class OrderHistoricComponent{
 
@@ -158,8 +138,8 @@ export class OrderHistoricComponent{
             result: formList.resultadoControl.value ?? '',
         }
        
-        this.overlayService.displayLoadingOverlay();
-        this.loading = true;
+        /* this.overlayService.displayLoadingOverlay();
+        this.loading = true; */
         
         /* this.cartService.getOrdersByPhone(filters.phone).subscribe((data: Order[]) => {
             

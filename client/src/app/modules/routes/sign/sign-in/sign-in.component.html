@@ -1,4 +1,9 @@
 <main>
+    <img
+        src="../../../../../assets/blobs/consorcioX.png"
+        class="logo"
+    >
+    
     <h1>Ingreso a AC</h1>
     <h3>Administracion de consorcios</h3>
 
@@ -25,6 +30,8 @@
             [inputControl]="formLoginGroup.controls.passwordControl"
             
         ></app-cool-input> -->
+
+        
 
         <ng-container *ngIf="authenticationService.getIsAutenticated() | async; else loggedOut">
               

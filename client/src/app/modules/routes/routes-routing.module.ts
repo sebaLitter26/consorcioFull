@@ -4,12 +4,17 @@ import { AuthorizationModule } from "../authorization/authorization.module";
 import { AuthorizationGuard } from "../authorization/guards/authorization-guard.service";
 
 const routes: Routes = [
-
     {
         path: 'consorcio',
         loadChildren: () => import('./consorcio/consorcio.module').then(m => m.ConsorcioModule),
         canActivate: [ AuthorizationGuard ],
+        data: { animation: 'isRight' } 
     },
+    /* {
+        path: 'consorcio',
+        loadChildren: () => import('./consorcio/consorcio.module').then(m => m.ConsorcioModule),
+       
+    }, */
     {
         path: 'cart',
         loadChildren: () => import('./cart/product-list.module').then(m => m.ProductListModule),
@@ -27,7 +32,7 @@ const routes: Routes = [
     },
     {
         path: '',
-        redirectTo: '/consorcio/cargas',   // primer pantalla que carga despues de loguear
+        redirectTo: '/consorcio',   // primer pantalla que carga despues de loguear
         pathMatch: 'full'
     },
 ];
@@ -36,8 +41,6 @@ const routes: Routes = [
     imports: [
         RouterModule.forChild(routes),
         AuthorizationModule,
-        
-        
     ],
     exports: [
         RouterModule,

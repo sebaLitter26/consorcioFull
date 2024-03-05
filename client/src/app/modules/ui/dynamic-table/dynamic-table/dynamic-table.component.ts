@@ -14,6 +14,7 @@ import { ItemDetailDirective } from '../directives/item-detail.directive';
 import { DynamicComponent, CustomCellComponent, DynamicTableDefinition, DynamicTableGroupingHeader, DynamicTableSearchItem, ItemDetailComponent } from '..';
 import { MatCheckbox, MatCheckboxChange } from '@angular/material/checkbox';
 import { of } from 'rxjs';
+import { detailExpand, hoverExpand, inOutAnimation, rotate } from 'src/app/modules/routes/animations';
 
 type SortingOrder = "asc" | "desc";
 
@@ -66,23 +67,7 @@ const RIGHT_HIGHLIGHT: string = "";
     selector: 'app-dynamic-table',
     templateUrl: './dynamic-table.component.html',
     styleUrls: ['./dynamic-table.component.scss'],
-    animations: [
-        trigger('detailExpand', [
-            state('collapsed', style({height: '0px', minHeight: '0'})),
-            state('expanded', style({height: '*'})),
-            transition('expanded <=> collapsed', animate('225ms cubic-bezier(0.4, 0.0, 0.2, 1)')),
-        ]),
-        trigger('hoverExpand', [
-            state('collapsed', style({width: '0px', minWidth: '0', opacity: '0'})),
-            state('expanded', style({width: '75px', opacity: '1'})),
-            transition('expanded <=> collapsed', animate('225ms cubic-bezier(0.4, 0.0, 0.2, 1)')),
-        ]),
-        trigger('rotate', [
-            state('right', style({ transform: 'rotate(0deg)'})),
-            state('bottom', style({ transform: 'rotate(90deg)'})),
-            transition('right <=> bottom', animate('225ms cubic-bezier(0.4, 0.0, 0.2, 1)')),
-        ]),
-    ],
+    animations: [inOutAnimation, detailExpand, hoverExpand, rotate],
 })
 export class DynamicTableComponent implements OnInit, AfterViewInit, OnDestroy {
 
@@ -903,6 +888,7 @@ export class DynamicTableComponent implements OnInit, AfterViewInit, OnDestroy {
     private __loadItemDetailComponent__(row: any): void {
         let currentIndex: number = 0;
         let itemDetailHost: ItemDetailDirective | undefined = this._itemDetailDirectiveQueryList?.first;
+        
 
         // Obtiene el índice de la fila actual, dependiendo del paginado actual de la tabla
         const getRowIndex: () => number = () => {

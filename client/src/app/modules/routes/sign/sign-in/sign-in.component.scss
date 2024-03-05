@@ -14,11 +14,16 @@ main {
     background-position: center;
 
     h1 {
-        margin-bottom: 1rem;
+        margin: 1rem;
         font-size: 1.33rem;
     }
     h3 {
         margin-bottom: 2rem;
+    }
+
+    .logo{
+        border-radius: 10px;
+
     }
 
     .inputs-container {

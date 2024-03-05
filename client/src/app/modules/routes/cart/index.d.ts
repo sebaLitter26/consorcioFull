@@ -1,4 +1,5 @@
-import { Building } from "../model"
+import { Building } from "../consorcio/building";
+
 
 /**El producto a vender */
 export interface Product {

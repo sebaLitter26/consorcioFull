@@ -21,6 +21,7 @@ export class AuthenticationGuardService {
         if (this.profileService.user.email == "") {
             this.authenticationService.tokenSignIn().subscribe({
                 next: (userStation) => {
+                    
                     this._activateSource.next(true);
                 },
                 error: (error: HttpErrorResponse) => {

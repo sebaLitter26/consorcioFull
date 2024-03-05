@@ -6,11 +6,6 @@ import { AuthenticationGuardService } from './modules/authentication/guards/auth
 
 
 const routes: Routes = [
-    /* {
-        path: '',
-        pathMatch: 'full',
-        redirectTo: 'sign',
-      }, */
     {
         path: 'sign',
         loadChildren: () => import('./modules/routes/sign/sign.module').then(m => m.SignModule),
@@ -22,9 +17,14 @@ const routes: Routes = [
     },
     {
         path: '**',
-        redirectTo: '/sign/in',
-        //pathMatch: 'full',
+        redirectTo: '',
+        pathMatch: 'full',
     },
+   /*  {
+        path: '*',
+        redirectTo: '',
+       
+    }, */
 ];
 
 @NgModule({

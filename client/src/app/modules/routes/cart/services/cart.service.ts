@@ -1,8 +1,8 @@
 import { Apollo } from 'apollo-angular';
 import { Injectable } from "@angular/core";
 import { map, Observable, of } from "rxjs";
-import { Building, BuildingListFilters } from '../../consorcio/cargas/building';
-import { BUILDINGS } from '../../consorcio/cargas/building/services/building.graphql';
+import { Building, BuildingListFilters } from '../../consorcio/building';
+import { BUILDINGS } from '../../consorcio/building/services/building.graphql';
 import { Order, Product } from '..';
 import { ORDERS, PRODUCTS } from './graphql';
 

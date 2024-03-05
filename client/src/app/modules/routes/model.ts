@@ -1,4 +1,6 @@
-import { User } from "./user";
+
+import { Product } from "./consorcio/product";
+
 
 
 export interface error {
@@ -12,51 +14,6 @@ export interface CustomCard {
     icon: string;
     value: string;
     color: string;
-}
-
-
-export interface Building{
-    id: string;
-    address: string;
-    location: string;
-    letter: string;
-    floors: number;
-    createdAt?: string;
-    updatedAt?: string;
-    appartment?: Appartment[]
-    //photo?: string | null;
-}
-
-
-export interface Appartment {
-    id: string;
-    building: Building;
-    buildingId: string;
-    owner?: Owner | null;
-    tenant?: Tenant | null;
-    floor: number;
-    letter: string;
-    observation: string;
-    createdAt: string;
-    updatedAt: string;
-}
-
-export interface Tenant {
-    id: string;
-    createdAt?: string;
-    observation: string;
-    appartments: Appartment;
-    user: User;
-    //__entity: string;
-}
-
-
-export interface Owner {
-    id: string;
-    createdAt?: string;
-    observation: string;
-    appartments: Appartment[];
-    user: User;
 }
 
 export interface Identification{
@@ -74,11 +31,4 @@ export interface Order extends Identification{
     id: number;
 }
 
-export interface Product{
-    brand: string;
-    photo: string;
-    price: number;
-    name: string;
-    stock: number;
 
-}

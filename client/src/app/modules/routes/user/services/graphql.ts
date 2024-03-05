@@ -4,12 +4,15 @@ import { gql } from "apollo-angular";
 // query
 
 export const USERS = gql`
-    query users($roles: [String]){
+    query users($roles: [Roles!]){
         users(roles: $roles){
           id,
           name,
           email,
+          updatedAt,
+          createdAt,
           rol,
+          phone,
           picture,
           isActive,
           appartment { 

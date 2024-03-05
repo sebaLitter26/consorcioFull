@@ -1,10 +1,10 @@
 import { Injectable, ViewContainerRef } from "@angular/core";
 import { ActivatedRouteSnapshot, Router, RouterStateSnapshot } from "@angular/router";
 import { Observable, of, switchMap, tap } from "rxjs";
-import { Building } from "../../model";
 import { CartService } from "../services/cart.service";
 import { Order, Product, ResolvedData } from "..";
 import { ProfileService } from "../../../main/services/profile.service";
+import { Building } from "../../consorcio/building";
 
 /**
  * Es un resolver para precargar los Pedidos, se utiliza en el Operations module

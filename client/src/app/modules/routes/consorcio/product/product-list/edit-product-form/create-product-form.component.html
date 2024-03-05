@@ -1,0 +1,66 @@
+<main>
+    <h2>{{productAction}}ar producto</h2>
+    <form class="form" [formGroup]="productForm" (ngSubmit)="onSubmit()">
+
+        <mat-form-field appearance="fill" color="primary">
+            <mat-label>Nombre</mat-label>
+            <input matInput autocomplete="off" type="text" placeholder="Ingrese Nombre." formControlName="name">
+        </mat-form-field>
+
+        <mat-form-field appearance="fill" color="primary">
+            <mat-label>Marca</mat-label>
+            <input matInput autocomplete="off" type="text" placeholder="Ingrese Marca." formControlName="brand">
+        </mat-form-field>
+
+        <mat-form-field appearance="fill" color="primary">
+            <mat-label>Descripción</mat-label>
+            <input matInput autocomplete="off" type="text" placeholder="Ingrese descripción." formControlName="description">
+        </mat-form-field>
+
+        <mat-form-field appearance="fill" color="primary">
+            <mat-label>Precio</mat-label>
+            <input matInput autocomplete="off" type="text" placeholder="Ingrese precio." formControlName="price"  pattern="[0-9]*" (keypress)="($event.charCode >= 48 && $event.charCode < 58)">
+        </mat-form-field>
+
+        <mat-form-field appearance="fill" color="primary">
+            <mat-label>Stock</mat-label>
+            <input matInput autocomplete="off" type="text" placeholder="Ingrese stock disponible." formControlName="stock"  pattern="[0-9]*" (keypress)="($event.charCode >= 48 && $event.charCode < 58)">
+        </mat-form-field>
+
+       
+    </form>
+    <app-cool-file-input *ngIf="product?.id" height="200px" [initialFiles]="this.images" (finalizaCarga)="addFile($event)"></app-cool-file-input>
+
+    <div class="submit-button-and-spinner">
+        <button *ngIf="!bSubmitting; else submitting"
+            appRoundButton
+            mat-stroked-button
+            color="primary"
+            class="btn-small"
+            (click)="productForm.reset()"
+        >
+            <mat-icon>clear</mat-icon>&nbsp;
+            Limpiar
+        </button>
+
+        <button
+            appRoundButton
+            mat-flat-button
+            color="accent"
+            class="btn-small"
+            type="submit"
+            (click)="onSubmit()" 
+            [disabled]="productForm.invalid"
+        >
+        
+            <mat-icon>send</mat-icon>&nbsp;
+            {{productAction}}ar
+        </button>
+
+        <ng-template #submitting>
+            <mat-spinner class="spinner" diameter="36"></mat-spinner>
+        </ng-template>
+    </div>
+
+
+</main>

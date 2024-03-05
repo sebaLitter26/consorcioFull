@@ -28,6 +28,12 @@ export class PluImageComponent implements CustomCellComponent, OnInit {
     ngOnInit(): void {
         if (!this.data || !this.componentData?.propertyPath)  return;
 
+        if(this.componentData?.propertyPath! == 'picture'){
+            this.images = [this.data[this.componentData?.propertyPath!]];
+            return;
+        } 
+        
+
         let cloudinary_source: Cloudinary[] = [];
 
         this.data[this.componentData?.propertyPath!].forEach((elem: string)=>{

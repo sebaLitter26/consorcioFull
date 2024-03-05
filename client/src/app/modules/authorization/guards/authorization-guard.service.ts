@@ -17,8 +17,8 @@ export class AuthorizationGuard {
     canActivate(next: ActivatedRouteSnapshot, state: RouterStateSnapshot): boolean {
         const pageRoute: string = state.url.split("/")[2]; // Ejemplo, de 'localhost/reports/operation-state', obtendria 'operation-state'
         const navbarItemsLength: number = this.navbarService.getNavbarItems().length;
-        
         if (this.profileService.hasRouteAccess(pageRoute)) {
+            
             
             return true;
         }

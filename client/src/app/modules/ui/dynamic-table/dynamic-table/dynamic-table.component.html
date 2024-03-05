@@ -1,5 +1,6 @@
 <div
     class="component-container"
+    [@inOutAnimation]
 >
     <div
         [id]="'scroll-highlight-' + this.randomId"
@@ -138,8 +139,10 @@
                         <td mat-cell *matCellDef="let element" class="item-cell" [style.max-width]="cellsMaxWidth ? cellsMaxWidth : ''" >
                             <ng-template *ngIf="customColumnComponents[i]" customCellHost></ng-template>
                             <div *ngIf="!customColumnComponents[i]" class="table-cell-content">
-                                <p [ngStyle]="columnStyles[i] ? columnStyles[i]!(element) : {}">
-                                    <!-- En caso de que el objeto no sea un valor primitivo, no mostrar nada. -->
+                                <p [ngStyle]="columnStyles[i] ? columnStyles[i]!(element) : {}" >
+                                    <!-- En caso de que el objeto no sea un valor primitivo, no mostrar nada. 
+                                    [innerHTML]=""
+                                -->
                                     <!-- En caso de que se reciba un formater para la columna actual, utilizar ese formato para mostrar el dato. -->
                                     {{  columnFormaters[i] ? columnFormaters[i]!(element) : (utilsService.getObjectType(element[column]) == "primitive" ? element[column] : '') }}
                                 </p>
@@ -150,7 +153,7 @@
                     <!-- Columna de toggle de filtros -->
                     <ng-container *ngIf="column == 'filters'" matColumnDef="filters">    
                         <th mat-header-cell *matHeaderCellDef style="text-align: right;">
-                            <mat-icon id="filters-icon" (click)="toggleFilters()" [ngClass]="_filtersActive ? 'active' : ''" [matTooltip]="_filtersActive ? 'Desactivar filtros' : 'Activar filtros'">filter_alt</mat-icon>
+                            <mat-icon id="filters-icon" (click)="toggleFilters()" [ngClass]="_filtersActive ? 'active' : ''" [matTooltip]="_filtersActive ? 'Desactivar filtros' : 'Activar filtros'">search_alt</mat-icon>
                         </th>
                         <td mat-cell *matCellDef="let element" class="filter-cell item-cell"></td>
                     </ng-container>

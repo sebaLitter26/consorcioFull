@@ -1,17 +1,16 @@
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnInit} from '@angular/core';
 import { CartService } from '../services/cart.service'
 import { Subject } from 'rxjs';
-import { AbstractControl, FormArray, FormBuilder, ValidatorFn, Validators } from '@angular/forms';
+import { FormBuilder, Validators } from '@angular/forms';
 import { OverlayService } from '../../../overlay/services/overlay.service';
 import { SnackBarService } from 'src/app/services/snackbar.service';
-import { animate, style, transition, trigger } from '@angular/animations';
 import { ActivatedRoute, Router } from '@angular/router';
 import { ProfileService } from 'src/app/modules/main/services/profile.service';
 import { CdkDragDrop, moveItemInArray, transferArrayItem } from '@angular/cdk/drag-drop';
 import {STEPPER_GLOBAL_OPTIONS} from '@angular/cdk/stepper';
 import { Order, Product, ResolvedData } from '..';
-import { Building } from '../../consorcio/cargas/building';
 import { User } from '../../user';
+import { detailExpand, hoverExpand, inOutAnimation, rotate } from 'src/app/modules/routes/animations';
 
 
 @Component({
@@ -25,29 +24,7 @@ import { User } from '../../user';
         },
       ],
     changeDetection: ChangeDetectionStrategy.OnPush,
-    animations: [
-        trigger(
-          'inOutAnimation', 
-          [
-            transition(
-              ':enter', 
-              [
-                style({ height: 0, opacity: 0 }),
-                animate('1s ease-out', 
-                        style({ height: 300, opacity: 1 }))
-              ]
-            ),
-            transition(
-              ':leave', 
-              [
-                style({ height: 300, opacity: 1 }),
-                animate('1s ease-in', 
-                        style({ height: 0, opacity: 0 }))
-              ]
-            )
-          ]
-        )
-    ]
+    animations: [inOutAnimation]
 })
 export class ProductListComponent implements OnInit{
 
@@ -94,9 +71,9 @@ export class ProductListComponent implements OnInit{
     ngOnInit(): void {
         /** Obtiene la lista de conteos precargada por el resolver */
         this.loading = true;
-        const bui = this.resolvedData.buildings.find(e => e.id == this.user.appartment?.buildingId )
+        //const bui = this.resolvedData.buildings.find(e => e.id == this.user.appartment?.buildingId )
 
-        this.contactFormGroup.controls.buildingCtrl.setValue(this.user.appartment?.buildingId ?? '')
+        //this.contactFormGroup.controls.buildingCtrl.setValue(this.user.appartment?.buildingId ?? '')
         
         /* if(!this.identification.building){
             this.identification = undefined;
