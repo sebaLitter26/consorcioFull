@@ -1,0 +1,32 @@
+mutation login {
+  login(
+    input:{
+    	email: "sebastian@hotmail.com"
+    	password: "123456"
+  	}
+  ){
+    accessToken,
+    refreshToken,
+    user{
+      name
+      email
+      lastUpdateBy{ name, __typename}
+      updatedAt
+    }
+  }
+}
+
+
+mutation signup{
+  signup(
+    input:{
+      email: "sebastian1@hotmail.com"
+      password: "123456"
+      name: "Seba"
+    }
+  ) {
+ 		user { id, updateBy{ name } }
+  	accessToken
+    refreshToken
+  }
+}
