@@ -151,7 +151,7 @@ export class AuthenticationService {
 
 
   logOut(){
-    this.authService.logout({ logoutParams: { returnTo: `${document.location.origin}/sign` }});
+    this.authService.logout({ logoutParams: { returnTo: `${document.location.origin}#/sign` }});
     this.profileService.killUser();
     
   }

@@ -1,6 +1,8 @@
 import { CanActivate, ExecutionContext, Injectable } from '@nestjs/common';
 import { GqlExecutionContext } from '@nestjs/graphql';
 import { AuthGuard } from '@nestjs/passport';
+import {jwtDecode} from 'jwt-decode';
+//import { OAuth2Client } from 'google-auth-library';
 
 
 export class JwtAuthGuard extends AuthGuard('jwt') {
@@ -10,14 +12,31 @@ export class JwtAuthGuard extends AuthGuard('jwt') {
 
         const ctx = GqlExecutionContext.create( context );
         const request = ctx.getContext().req;
-        return request;
+        const payload = jwtDecode(request.body.variables.token);
+        console.log( 'getRequest', payload); 
+        
+        return payload;
     } */
 
     async canActivate(context: ExecutionContext) {
-        const activate = (await super.canActivate(context)) as boolean;
-        const request = context.switchToHttp().getRequest();
-        await super.logIn(request);
-        return activate;
+        //const activate = (await super.canActivate(context)) as boolean;
+        //const response = context.switchToHttp().getRequest();
+
+        const ctx = GqlExecutionContext.create( context );
+
+        //const request = context.switchToHttp().getRequest();
+
+        const request = ctx.getContext().req;
+      
+        const usetFromToken: any = jwtDecode(request.headers['authorization']);
+        
+        return usetFromToken.email;
+
+        
+        
+        //await super.logIn(response);
+        //return usetFromToken.email ?? false;
+        //return response;
     }
 }
 
@@ -26,10 +45,10 @@ export class JwtAuthGuard extends AuthGuard('jwt') {
 export class OAuth2Guard extends AuthGuard('oauth2') {
   async canActivate(context: ExecutionContext) {
     const activate = (await super.canActivate(context)) as boolean;
-    const request = context.switchToHttp().getRequest();
-    console.log(request);
+    const response = context.switchToHttp().getResponse();
+    console.log(response); 
     
-    await super.logIn(request);
+    //await super.logIn(response);
     return activate; 
   }
 }

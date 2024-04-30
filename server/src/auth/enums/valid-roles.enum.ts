@@ -3,10 +3,10 @@ import { registerEnumType } from "@nestjs/graphql";
 
 export enum ValidRoles {
     admin     = 'admin', 
-    user      = 'user',  
-    superUser = 'superUser'
+    tenant    = 'tenant',  
+    owner     = 'owner'
 }
 
-registerEnumType( ValidRoles, { name: 'Roles', description: 'Roles validos para el usuario (admin, user, superUser). ' } )
+registerEnumType( ValidRoles, { name: 'Roles', description: 'Roles validos para el usuario (admin, inquilino, propietario). ' } )
 
 

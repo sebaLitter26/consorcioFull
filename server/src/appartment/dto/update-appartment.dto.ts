@@ -8,4 +8,9 @@ export class UpdateAppartmentDTO extends PartialType(CreateAppartmentDTO) {
   @IsUUID()
   @Field(() => ID)
   id: string;
+
+  /* @IsNotEmpty()
+  @IsUUID()
+  @Field(() => [ID], { nullable: false })
+  users: string[]; */
 }

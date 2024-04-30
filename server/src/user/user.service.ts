@@ -1,5 +1,5 @@
 import { BadRequestException, Injectable, InternalServerErrorException, Logger, NotFoundException } from '@nestjs/common';
-const bcrypt = require('bcryptjs');
+//const bcrypt = require('bcryptjs');
 
 //import { User } from './model/user';
 
@@ -15,11 +15,8 @@ import { Roles, User } from '@prisma/client';
 export class UserService {
     private logger: Logger = new Logger('UsersService')
 
-
     constructor(private readonly data: PrismaService) {}
   
-  
-
     async create( signupInput: SignupInput ) {
       
       try {
@@ -28,7 +25,7 @@ export class UserService {
             data: {
                 ...signupInput,
                 isActive: true,
-                password: bcrypt.hashSync( signupInput.password, 10 )
+                //password: bcrypt.hashSync( signupInput.password, 10 )
             }
           });
   
@@ -43,18 +40,20 @@ export class UserService {
   
       if ( roles.length === 0 ) 
         return this.data.user.findMany({
+          include: { appartment: true },
           // TODO: No es necesario porque tenemos lazy la propiedad lastUpdateBy
           // relations: {
           //   lastUpdateBy: true
           // }
         });
   
-      // ??? tenemos roles ['admin','superUser']
+      // ??? tenemos roles ['admin','tenant']
 
       return this.data.user.findMany({
         where: {
-            roles: { hasSome: [Roles.superUser,Roles.admin]}
-        }
+            rol: { in: roles}
+        },
+        include: { appartment: true },
       });
       /* return this.data.user.createQueryBuilder()
         .andWhere('ARRAY[roles] && ARRAY[:...roles]')
@@ -66,7 +65,10 @@ export class UserService {
   
     async findOneByEmail( email: string ) {
       try {
-        return await this.data.user.findUnique({where: { email }});
+        return await this.data.user.findUnique({
+          where: { email },
+          include: { appartment: true },
+        });
       } catch (error) {
         throw new NotFoundException(`${ email } not found`);
         // this.handleDBErrors({
@@ -78,7 +80,10 @@ export class UserService {
   
     async findOneById( id: string ) {
       try {
-        return await this.data.user.findUnique({where: { id }});
+        return await this.data.user.findUnique({
+          where: { id },
+          include: { appartment: true },
+        });
       } catch (error) {
         throw new NotFoundException(`${ id } not found`);
       }
@@ -94,7 +99,9 @@ export class UserService {
         return await this.data.user.update({
             data: {
                 ...updateUserInput,
-                userId: updateBy.id,
+                modifierId: updateBy.id,
+                //appartment: { connect: { id: updateUserInput.appartmentId } },
+                //lastUpdateBy: { connect: { id: updateBy.id } },
                 id
             },
             where: { id }
@@ -117,13 +124,17 @@ export class UserService {
         if(userToBlock) {
           userToBlock.isActive = false;
           //userToBlock.lastUpdateBy = { connect: adminUser } ;
-          userToBlock.userId = adminUser.id;
+          userToBlock.modifierId = adminUser.id;
+
+          console.log('userToBlock', userToBlock);
+          
           try{
-            return await this.data.user.create( { 
+            return await this.data.user.update( { 
               data: {
                 ...userToBlock,
-                //lastUpdateBy :   {connect: {userId: adminUser.id }}
-              }
+                //lastUpdateBy :   {connect: {modifierId: adminUser.id }}
+              },
+              where: { id }
             });
           } catch (error) {
             this.handleDBErrors( error );

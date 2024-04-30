@@ -9,11 +9,9 @@ import { SnackBarService } from 'src/app/services/snackbar.service';
 import { finalize, take } from 'rxjs/operators';
 import { MatCheckboxChange } from '@angular/material/checkbox';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
-import { ActivatedRoute, ActivatedRouteSnapshot } from '@angular/router';
 import { ArrayUtils } from 'src/app/utils/array.utils';
 import { AppartmentService } from '../services/appartment.service';
 import { Building } from '../../building';
-import { CargasService } from '../../cargas/services/cargas.service';
 import { BuildingService } from '../../building/services/buildings.service';
 
 

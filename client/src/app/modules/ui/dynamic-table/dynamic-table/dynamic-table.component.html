@@ -1,6 +1,5 @@
 <div
     class="component-container"
-    [@inOutAnimation]
 >
     <div
         [id]="'scroll-highlight-' + this.randomId"
@@ -137,12 +136,12 @@
                             </div>
                         </th>
                         <td mat-cell *matCellDef="let element" class="item-cell" [style.max-width]="cellsMaxWidth ? cellsMaxWidth : ''" >
-                            <ng-template *ngIf="customColumnComponents[i]" customCellHost></ng-template>
+                            <!-- <ng-template *ngIf="customColumnComponents[i]" customCellHost></ng-template> -->
+                            <ng-container *ngIf="customColumnComponents[i]" customCellHost ></ng-container>
+                            
                             <div *ngIf="!customColumnComponents[i]" class="table-cell-content">
-                                <p [ngStyle]="columnStyles[i] ? columnStyles[i]!(element) : {}" >
-                                    <!-- En caso de que el objeto no sea un valor primitivo, no mostrar nada. 
-                                    [innerHTML]=""
-                                -->
+                                <p [ngStyle]="columnStyles[i] ? columnStyles[i]!(element) : {}">
+                                    <!-- En caso de que el objeto no sea un valor primitivo, no mostrar nada. -->
                                     <!-- En caso de que se reciba un formater para la columna actual, utilizar ese formato para mostrar el dato. -->
                                     {{  columnFormaters[i] ? columnFormaters[i]!(element) : (utilsService.getObjectType(element[column]) == "primitive" ? element[column] : '') }}
                                 </p>

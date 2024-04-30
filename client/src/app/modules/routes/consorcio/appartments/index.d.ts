@@ -7,13 +7,14 @@ export interface BuildingListFilters {
 
 
 export interface Appartment {
-    id:      String 
+    id:      string 
     createdAt:   String
     updatedAt:   string
     observation: string
     floor:       number
     letter:      string
     building:    Building
+    buildingId:  string
     users:      User[]
 }
 

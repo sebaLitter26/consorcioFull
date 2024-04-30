@@ -56,12 +56,13 @@ const routes: Routes = [
     declarations: [
         ProductListComponent, 
         OrderHistoricComponent,
-        OrderDetailComponent
+        OrderDetailComponent,
+      
     ],
     providers: [
-        DatePipe,
         ProductDetailResolver,
         CartService,
+        DatePipe
     ]
 })
 export class ProductListModule { }

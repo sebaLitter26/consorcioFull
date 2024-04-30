@@ -39,44 +39,16 @@ export const ORDERS = gql`
       
     }
 `;
-/* 
-export const login = gql`
-query login($email: String!, $password: String!) {
-  login(email: $email, password: $password) {
-    status
-    message
-    token
-  }
-}
-`;
-
-export const getUsers = gql`
-query {
-  users {
-    id
-    name
-    lastname
-    email
-    registerDate
-  }
-}
-`;
-
-
 
 // mutations 
-export const registerData = gql`
-    mutation addUser($user: UserInput!) {
-        register(user: $user) {
-            status
-            message
-            user {
-                id
-                name
-                lastname
-                email
-                registerDate
-            }
-        }
+export const CREATE_ORDER = gql`
+    mutation createOrder($input: CreateOrderDTO!) {
+      createOrder(input: $input) {
+       
+        appartmentId
+        phone
+        observation
+        
+      }
     }
-`; */
+`; 

@@ -12,7 +12,7 @@ const files = filesNames.map((file: string) => ({
 }));
 
 async function main() {
-  const result = Promise.all(
+  /* const result = Promise.all(
     files.map(async (file) => {
       return await prisma.category.create({
         data: {
@@ -36,7 +36,7 @@ async function main() {
       });
     }),
   );
-  await result;
+  await result; */
 }
 
 main()

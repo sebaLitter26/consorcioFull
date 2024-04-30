@@ -1,5 +1,5 @@
 import { Resolver, Query, Mutation, Args, Int, ID } from '@nestjs/graphql';
-import { UseGuards, ParseUUIDPipe } from '@nestjs/common';
+import { UseGuards, ParseUUIDPipe, Req, Body } from '@nestjs/common';
 import { UserService } from './user.service';
 import { User } from './model/user';
 import { CreateUserInput } from './dto/create-user.input';
@@ -10,36 +10,36 @@ import { CurrentUser } from '../auth/decorators/current-user.decorator';
 import { Roles, User as UserSchema } from '@prisma/client';
 
 @Resolver(() => User)
-@UseGuards( GraphQLAuthGuard )// JwtAuthGuard )
+@UseGuards( JwtAuthGuard  ) //   GraphQLAuthGuard)
 export class UserResolver {
   constructor(private readonly userService: UserService) {}
 
-  @Mutation(() => User)
-  async createUser(@Args('createUserInput') createUserInput: CreateUserInput) {
+  @Mutation(() => User, { name: 'createUser' })
+  async createUser(@Args('input') createUserInput: CreateUserInput) {
     return this.userService.create(createUserInput);
   }
 
   @Query(() => [User], { name: 'users' })
   async users(
     @Args() validRoles: ValidRolesArgs,
-    @CurrentUser([Roles.admin, Roles.superUser ]) user: User
+    @CurrentUser([Roles.admin ]) user: UserSchema
   ) {
-
+    
     return this.userService.findAll( validRoles.roles );
   }
 
   @Query(() => User, { name: 'user' })
   async user( 
     @Args('id', { type: () => ID }, ParseUUIDPipe ) id: string,
-    @CurrentUser([Roles.admin, Roles.superUser ]) user: User
+    @CurrentUser([Roles.admin ]) user: User
   ): Promise<UserSchema | null> {
     
     return this.userService.findOneById(id);
   }
 
-  @Mutation(() => User)
+  @Mutation(() => User, { name: 'updateUser' })
   async updateUser(
-    @Args('updateUserInput') updateUserInput: UpdateUserInput,
+    @Args('input') updateUserInput: UpdateUserInput,
     @CurrentUser([Roles.admin ]) user: UserSchema
   ): Promise<UserSchema> {
     return this.userService.update(updateUserInput.id, updateUserInput, user );

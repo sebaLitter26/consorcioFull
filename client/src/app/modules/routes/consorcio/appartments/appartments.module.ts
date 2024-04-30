@@ -8,13 +8,11 @@ import { AppartmentsListComponent } from "./appartments-list/appartment-list.com
 import { CupoHistoricComponent } from "./cupo-historico/historic.component";
 import { CupoInformationComponent } from "./cupo-historico/cupo-detail/cupo-detail.component";
 import { DynamicTableModule } from "../../../../ui/dynamic-table/dynamic-table.module";
-import { DatePipe } from '@angular/common';
 import { RoutesCommonModule } from "../../../../common/routes-common.module";
 import { AppartmentComponent } from "./appartment/appartment.component";
 import { AppartmentSharedService } from "./services/appartment-shared.service";
 import { AppartmentService } from "./services/appartment.service";
 import { AppartmentComponentRegistry } from "./appartment-registry/appartment-registry.component";
-import { FloorPipe } from "src/app/modules/ui/cool-file-input/pipes/floor.pipe";
 
 const routes: Routes = [
 
@@ -50,13 +48,12 @@ const routes: Routes = [
         CupoHistoricComponent,
         CupoInformationComponent,
         AppartmentComponentRegistry,
-        FloorPipe
+      
     ],
     providers: [
         AppartmentService,
         AppartmentSharedService,
-        DatePipe,
-        FloorPipe
+    
     ],
 })
 export class AppartmentsModule {}

@@ -8,8 +8,8 @@ import { AuthResponse } from './types/auth-response.type';
 import { PrismaService } from '../core/prisma/prisma.service';
 //import { ConfigService } from '@nestjs/config';
 import { User } from '@prisma/client';
-import { PublicErrors } from 'src/interceptors/public-errors.enum';
-import { WhatsappService } from 'src/core/whatsapp/whatsapp.service';
+//import { WhatsappService } from 'src/core/whatsapp/whatsapp.service';
+import { PublicErrors } from '../interceptors/public-errors.enum';
 
 
 @Injectable()
@@ -22,11 +22,52 @@ export class AuthService {
         //private readonly whatsappService: WhatsappService
     ) {}
 
+    getUserFromToken(token: string): Promise<User> {
+
+        const user = this.jwtService.decode(token);
+
+        if (!token || !user) {
+            throw new NotFoundException({
+              code: PublicErrors.INVALID_CREDENTIALS,
+              message: `Invalid credentials. User not Found`,
+            });
+        }
+        return this.validateUserEmail(user) ;
+    }
+
+
+    //new loggin 
+
+    async validateUserEmail(payload: {email: string, picture: string, name: string}) : Promise<User> {
+      
+        const user = await this.prisma.user.findUnique({ 
+            where: {email: payload.email } ,
+            include: { appartment: true },
+        });
+        if (user) {
+            if(!user.isActive){
+                throw new NotFoundException({
+                    code: PublicErrors.BLOCKED,
+                    message: `User Blocked`,
+                  });
+            }
+            
+            return user;
+        }
+        console.log('User not found. Creating...');
+        const { email, picture, name } = payload;
+        return this.prisma.user.create({
+            data: {name, email, picture}
+        });
+    }
+
+    // getUser instead of findUser
+
     /* private getJwtToken( userId: string ) {
         return this.jwtService.sign({ id: userId });
     } */
 
-
+/* 
     async signup( signupInput: SignupInput ): Promise<AuthResponse> {
 
         const user = await this.prisma.user.create( {
@@ -52,7 +93,7 @@ export class AuthService {
 
         return { ...tokens, user };
     }
-
+ 
 
     async login( loginInput: LoginInput ): Promise<AuthResponse> {
         
@@ -97,20 +138,19 @@ export class AuthService {
 
         if (!user || !user.isActive )
             throw new UnauthorizedException(`User is inactive, talk with an admin`);
-        /* else if(user && user.password)
-            delete user.password; */
+        // else if(user && user.password) delete user.password; 
 
         return user;
     }
 
 
-    /* revalidateToken( user: User ): AuthResponse {
+     revalidateToken( user: User ): AuthResponse {
 
         const token = this.getJwtToken( user.id );
 
         return { token, user };
 
-    } */
+    } 
 
     async refreshToken(token: string): Promise<AuthResponse> {
         try {
@@ -144,6 +184,9 @@ export class AuthService {
         });
     }
 
+
+
+    
     async getUser( id: string): Promise<User> {
         const user = await this.prisma.user.findUnique({ where: { id } });
 
@@ -155,36 +198,8 @@ export class AuthService {
         }
         return user;
     }
-
-    getUserFromToken(token: string): Promise<User> {
-
-        const user = this.jwtService.decode(token);
-
-        if (!token || !user) {
-            throw new NotFoundException({
-              code: PublicErrors.INVALID_CREDENTIALS,
-              message: `Invalid credentials. User not Found`,
-            });
-        }
-        return this.getUser(user['userId']) ;
-    }
-
-
-    //new loggin 
-
-    async validateUser2(payload: { email: string }) : Promise<User> {
-        console.log('AuthService');
-        console.log(payload);
-        const user = await this.prisma.user.findUnique({ where: {email: payload.email } });
-        console.log(user);
-        if (user) return user;
-        console.log('User not found. Creating...');
-        /* return this.prisma.user.create({
-            data: payload
-        }); */
-    }
-
-    // getUser instead of findUser
+*/
+    
     
 
 }

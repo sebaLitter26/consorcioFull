@@ -4,6 +4,7 @@ import { CommonModule } from '@angular/common';
 import { CoolDirectivesModule } from './ui/cool-input/cool-directives/cool-directives.module';
 import { ReactiveFormsModule } from '@angular/forms';
 import { ProcessStatusModule } from './process-status/process-status.module';
+import { FloorPipe } from './ui/cool-file-input/pipes/floor.pipe';
 
 @NgModule({
     exports: [
@@ -12,7 +13,11 @@ import { ProcessStatusModule } from './process-status/process-status.module';
         ProcessStatusModule,
         ReactiveFormsModule,
         CoolDirectivesModule,
+        FloorPipe,
         
-    ]
+    ],
+    declarations: [ 
+        FloorPipe,
+    ],
 })
 export class SharedModule {}

@@ -1,8 +1,7 @@
 import { CreateUserInput } from './create-user.input';
-import { InputType, Field, Int, PartialType, ID } from '@nestjs/graphql';
+import { InputType, Field, PartialType, ID } from '@nestjs/graphql';
 import { Roles } from '@prisma/client';
-import { IsArray, IsBoolean, IsOptional, IsUUID } from 'class-validator';
-import { ValidRoles } from 'src/auth/enums/valid-roles.enum';
+import { IsBoolean, IsMobilePhone, IsOptional, IsUUID } from 'class-validator';
 
 
 @InputType()
@@ -11,11 +10,23 @@ export class UpdateUserInput extends PartialType(CreateUserInput) {
         @Field(() => ID)
         @IsUUID()
         id: string;
-      
-        @Field( () => [Roles], { nullable: true })
-        @IsArray()
+
+        @Field(() => ID, { nullable: false })
+        @IsUUID()
+        modifierId: string;
+
+        @Field( () => ID, { nullable: false })
+        @IsUUID()
+        //@IsOptional()
+        appartmentId: string;
+
+        /* @Field( () => Appartment, { nullable: true })
         @IsOptional()
-        roles: Roles[];
+        appartment?: Appartment */
+      
+        @Field( () => Roles, { nullable: true })
+        @IsOptional()
+        rol: Roles;
       
         @Field( () => Boolean, { nullable: true })
         @IsBoolean()
@@ -24,5 +35,6 @@ export class UpdateUserInput extends PartialType(CreateUserInput) {
 
         @Field( () => String, { nullable: true })
         @IsOptional()
-        userId?: String
+        @IsMobilePhone('es-AR')
+        phone?: string
 }

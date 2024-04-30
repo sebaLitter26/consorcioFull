@@ -6,7 +6,6 @@ import { ReactiveFormsModule } from '@angular/forms';
 import { CoolDirectivesModule } from '../../ui/cool-input/cool-directives/cool-directives.module';
 import { CoolInputModule } from '../../ui/cool-input/cool-input.module';
 import { AuthorizationModule } from '../../authorization/authorization.module';
-import { DatePipe } from '@angular/common';
 import { ProcessStatusModule } from '../../process-status/process-status.module';
 import { RoutesCommonModule } from '../../common/routes-common.module';
 import { LoadersModule } from "../../ui/loaders/loaders.module";
@@ -14,7 +13,6 @@ import { DashboardCardModule } from '../../ui/dashboard-card/dashboard-card.modu
 import { CargasComponent } from './cargas/cargas.component';
 import { UserModule } from '../user/user.module';
 import { CoolFileInputModule } from '../../ui/cool-file-input/cool-file-input.module';
-import { FloorPipe } from "../../ui/cool-file-input/pipes/floor.pipe";
 
 import { ProductComponent } from './product/product-list/product-list.component';
 import { ClientComponent } from './client/client.component';
@@ -92,11 +90,10 @@ const routes: Routes = [
         //CupoHistoricComponent,
         //CupoInformationComponent,
         AppartmentComponentRegistry,
-        FloorPipe
+        
         
     ],
     providers: [
-        DatePipe,
 
         //Building
         BuildingService,
@@ -114,8 +111,7 @@ const routes: Routes = [
         //stepper
         CargasService,
 
-        DatePipe,
-        FloorPipe
+       
     ]
 })
 export class ConsorcioModule {}

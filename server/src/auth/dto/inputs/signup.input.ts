@@ -15,6 +15,6 @@ export class SignupInput  {  //extends PartialType(LoginInput)
 
     @Field( () => String )
     @MinLength(6)
-    password: string;
+    picture: string;
 
 }

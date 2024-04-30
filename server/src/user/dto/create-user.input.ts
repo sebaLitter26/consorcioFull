@@ -18,5 +18,5 @@ export class CreateUserInput {
     @IsNotEmpty()
     @Field(() => String, { nullable: false })
     @MinLength(6)
-    password: string;
+    picture: string;
 }

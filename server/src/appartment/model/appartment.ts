@@ -1,7 +1,6 @@
 import { Field, ID, ObjectType } from '@nestjs/graphql';
-import { Owner } from 'src/owner/model/owner';
-import { Tenant } from 'src/tenant/model/tenant';
-import { Building } from 'src/building/model/building';
+import { Building } from './../../building/model/building';
+import { User } from '../../user/model/user';
 
 @ObjectType()
 export class Appartment {
@@ -23,7 +22,7 @@ export class Appartment {
   @Field({ nullable: true })
   observation: string;
 
-  @Field(() => Owner, { nullable: true })
+  /* @Field(() => Owner, { nullable: true })
   owner: Owner;
 
   @Field({ nullable: true })
@@ -32,12 +31,17 @@ export class Appartment {
   @Field(() => Tenant, { nullable: true })
   tenant: Tenant;
 
-  @Field({ nullable: true })
-  tenantId: string;
+
+*/
+  @Field(() => [User] ,{ nullable: true })
+  users: User[]; 
 
   @Field(() => Building, { nullable: true })
   building: Building;
 
-  @Field({ nullable: true })
+  @Field(() => ID,{ nullable: true })
   buildingId: string;
+
+  /* @Field(() => [Order] ,{ nullable: true })
+  orders: Order[];  */
 }

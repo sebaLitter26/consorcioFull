@@ -142,7 +142,7 @@ export class CupoHistoricComponent{
         private overlayService: OverlayService,
         //private fb: FormBuilder,
         private changeDetectorRef: ChangeDetectorRef,
-        private datepipe: DatePipe,
+        private datePipe: DatePipe,
         public router: Router,
     ) {
         //this.searchCupo();
@@ -153,8 +153,8 @@ export class CupoHistoricComponent{
         const formList = this.formRenditionListGroup.controls;
 
         const filters: any = {
-            fechadesde: this.datepipe.transform(new Date(formList.fechaDesdeControl.value!), 'yyyyMMdd')!, 
-            fechahasta: this.datepipe.transform(new Date(formList.fechaHastaControl.value ?? this.today), 'yyyyMMdd')!,
+            fechadesde: this.datePipe.transform(new Date(formList.fechaDesdeControl.value!), 'yyyyMMdd')!, 
+            fechahasta: this.datePipe.transform(new Date(formList.fechaHastaControl.value ?? this.today), 'yyyyMMdd')!,
             sucursal: formList.sucursalControl.value ?? ''
         }
        

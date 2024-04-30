@@ -2,135 +2,22 @@
 # THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
 # ------------------------------------------------------
 
-type Answer {
-  id: ID
-  createdAt: DateTime
-  updatedAt: DateTime
-  content: String
-  isCorrect: Boolean
-  questionId: String
-  question: Question
-  url: String
+type Building {
+  id: ID!
+  createdAt: DateTime!
+  updatedAt: DateTime!
+  address: String!
+  location: String!
+  floors: Float!
+  letter: String!
+  images: [String!]
+  appartments: [Appartment!]!
 }
 
 """
 A date-time string at UTC, such as 2019-12-03T09:54:33Z, compliant with the date-time format.
 """
 scalar DateTime
-
-type Category {
-  id: ID
-  createdAt: DateTime
-  updatedAt: DateTime
-  name: String
-  questions: [Question!]!
-}
-
-type Question {
-  id: ID
-  createdAt: DateTime
-  updatedAt: DateTime
-  content: String
-  answers: [Answer!]
-  category: Category
-  categoryId: String
-}
-
-type QuizAnswer {
-  id: String
-  content: String
-}
-
-type QuizCategory {
-  id: String
-  name: String
-}
-
-type Quiz {
-  id: String
-  content: String
-  answers: [QuizAnswer!]
-  category: QuizCategory
-  createdAt: DateTime
-}
-
-type Metadata {
-  url: String
-}
-
-type QuizResult {
-  result: Boolean
-  metadata: Metadata
-}
-
-type User {
-  id: ID!
-  name: String!
-  email: String!
-
-  """Roles del Usuario"""
-  roles: [Roles!]!
-  isActive: Boolean
-  userId: String!
-
-  """lastUpdateBy"""
-  lastUpdateBy: User
-
-  """updateBy"""
-  updateBy: [User!]
-  createdAt: String!
-  updatedAt: String!
-}
-
-"""Roles validos para el usuario (admin, user, superUser). """
-enum Roles {
-  admin
-  user
-  superUser
-}
-
-type AuthResponse {
-  """JWT access token"""
-  accessToken: String!
-
-  """JWT refresh token"""
-  refreshToken: String!
-
-  """User"""
-  user: User!
-}
-
-type Owner {
-  id: ID
-  createdAt: DateTime
-  updatedAt: DateTime
-  observation: String
-  appartments: [Appartment!]
-  user: User
-  userId: ID
-}
-
-type Tenant {
-  id: ID
-  createdAt: DateTime
-  updatedAt: DateTime
-  observation: String
-  appartment: [Appartment!]
-  user: User
-  userId: String
-}
-
-type Building {
-  id: ID
-  createdAt: DateTime
-  updatedAt: DateTime
-  address: String
-  location: String
-  floors: Float
-  letter: String
-  images: [String!]
-  appartments: [Appartment!]
-}
 
 type Appartment {
   id: ID
@@ -139,130 +26,133 @@ type Appartment {
   floor: Float
   letter: String
   observation: String
-  owner: Owner
-  ownerId: String
-  tenant: Tenant
-  tenantId: String
+  users: [User!]
   building: Building
-  buildingId: String
+  buildingId: ID
+}
+
+type User {
+  id: ID!
+  name: String!
+  email: String!
+  notes: String
+  picture: String!
+
+  """Ex: +5491165404122"""
+  phone: String
+
+  """Rol del Usuario"""
+  rol: Roles!
+  isActive: Boolean!
+
+  """Id del ultimo user que llamo a updateUser"""
+  modifierId: ID
+
+  """appartmentId"""
+  appartmentId: ID
+
+  """appartment"""
+  appartment: Appartment
+  createdAt: DateTime!
+  updatedAt: DateTime
+}
+
+"""Roles validos para el usuario (admin, owner, tenant). """
+enum Roles {
+  admin
+  tenant
+  owner
+}
+
+type Product {
+  id: ID
+  createdAt: DateTime
+  updatedAt: DateTime
+  price: Float
+  stock: Float
+  images: [String!]
+  name: String
+  description: String
+  brand: String
+}
+
+type ProductOnOrder {
+  id: ID
+  createdAt: DateTime!
+  updatedAt: DateTime!
+  quantity: Float!
+  price: Float!
+  productId: ID!
+  product: Product!
+  orderId: ID
+}
+
+type Order {
+  id: ID
+  createdAt: DateTime
+  updatedAt: DateTime
+  phone: Float!
+  userId: ID!
+  user: User!
+  appartmentId: ID
+  appartment: Appartment!
+  observation: String
+  cart: [ProductOnOrder!]!
 }
 
 type Query {
-  questions: [Question!]!
-  question(id: String!): Question!
-  answers(offset: Int = 0, limit: Int = 100, search: String): [Answer!]!
-  answer(id: String!): Answer!
-  categories: [Category!]!
-  category(id: String!): Category!
-  quiz(input: QuizDTO!): Quiz!
-  doQuiz(input: CheckAnswerDTO!): QuizResult!
   users(roles: [Roles!]): [User!]!
   user(id: ID!): User!
-  revalidate: AuthResponse!
-  oauthLogin: AuthResponse!
+  oAuthLogin(token: String!): User!
   appartments: [Appartment!]!
   appartment(id: String!): Appartment!
   buildings: [Building!]!
   building(id: String!): Building!
-  owners: [Owner!]!
-  owner(id: String!): Owner!
-  tenants: [Tenant!]!
-  tenant(id: String!): Tenant!
-}
-
-input QuizDTO {
-  categoryId: String
-}
-
-input CheckAnswerDTO {
-  quizId: String
-  selectedAnswerId: String
+  products: [Product!]!
+  product(id: String!): Product!
+  Orders: [Order!]!
+  Order(id: String!): Order!
+  ProductOnOrders: [ProductOnOrder!]!
+  ProductOnOrder(id: String!): ProductOnOrder!
 }
 
 type Mutation {
-  createQuestion(input: CreateQuestionDTO!): Question!
-  updateQuestion(input: UpdateQuestionDTO!): Question!
-  deleteQuestion(id: String!): Question!
-  createAnswer(input: CreateAnswerDTO!): Answer!
-  updateAnswer(input: UpdateAnswerDTO!): Answer!
-  deleteAnswer(id: String!): Answer!
-  createCategory(input: CreateCategoryDTO!): Category!
-  updateCategory(input: CreateCategoryDTO!): Category!
-  deleteCategory(id: String!): Category!
-  createUser(createUserInput: CreateUserInput!): User!
-  updateUser(updateUserInput: UpdateUserInput!): User!
+  createUser(input: CreateUserInput!): User!
+  updateUser(input: UpdateUserInput!): User!
   blockUser(id: ID!): User!
-  signup(input: SignupInput!): AuthResponse!
-  login(input: LoginInput!): AuthResponse!
   createAppartment(input: CreateAppartmentDTO!): Appartment!
   updateAppartment(input: UpdateAppartmentDTO!): Appartment!
   deleteAppartment(id: String!): Appartment!
   createBuilding(input: CreateBuildingDTO!): Building!
   updateBuilding(input: UpdateBuildingDTO!): Building!
   deleteBuilding(id: String!): Building!
-  createOwner(input: CreateOwnerDTO!): Owner!
-  updateOwner(input: UpdateOwnerDTO!): Owner!
-  deleteOwner(id: String!): Owner!
-  createTenant(input: CreateTenantDTO!): Tenant!
-  updateTenant(input: UpdateTenantDTO!): Tenant!
-  deleteTenant(id: String!): Tenant!
-}
-
-input CreateQuestionDTO {
-  content: String!
-  categoryId: String!
-}
-
-input UpdateQuestionDTO {
-  content: String
-  categoryId: String
-  id: String!
-}
-
-input CreateAnswerDTO {
-  content: String
-  isCorrect: Boolean
-  questionId: String
-  url: String
-}
-
-input UpdateAnswerDTO {
-  content: String
-  isCorrect: Boolean
-  questionId: String
-  url: String
-  id: String!
-}
-
-input CreateCategoryDTO {
-  name: String
+  createProduct(input: CreateProductDTO!): Product!
+  updateProduct(input: UpdateProductDTO!): Product!
+  deleteProduct(id: String!): Product!
+  createOrder(input: CreateOrderDTO!): Order!
+  updateOrder(input: UpdateOrderDTO!): Order!
+  deleteOrder(id: String!): Order!
+  createProductOnOrder(input: CreateProductOnOrderDTO!): ProductOnOrder!
+  updateProductOnOrder(input: UpdateProductOnOrderDTO!): ProductOnOrder!
+  deleteProductOnOrder(id: String!): ProductOnOrder!
 }
 
 input CreateUserInput {
   email: String!
   name: String!
-  password: String!
+  picture: String!
 }
 
 input UpdateUserInput {
   email: String
   name: String
-  password: String
+  picture: String
   id: ID!
-  roles: [Roles!]
+  modifierId: ID!
+  appartmentId: ID!
+  rol: Roles
   isActive: Boolean
-  userId: String
-}
-
-input SignupInput {
-  email: String!
-  name: String!
-  password: String!
-}
-
-input LoginInput {
-  email: String!
-  password: String!
+  phone: String
 }
 
 input CreateAppartmentDTO {
@@ -297,24 +187,49 @@ input UpdateBuildingDTO {
   id: ID!
 }
 
-input CreateOwnerDTO {
-  observation: String!
-  appartmentId: [ID!]!
+input CreateProductDTO {
+  price: Float!
+  stock: Float!
+  name: String!
+  images: [String!]
+  brand: String!
+  description: String
 }
 
-input UpdateOwnerDTO {
-  observation: String
-  appartmentId: [ID!]
+input UpdateProductDTO {
+  price: Float
+  stock: Float
+  name: String
+  images: [String!]
+  brand: String
+  description: String
   id: ID!
 }
 
-input CreateTenantDTO {
-  observation: String!
-  userId: ID!
+input CreateOrderDTO {
+  appartmentId: ID!
+  phone: String!
+  observation: String
 }
 
-input UpdateTenantDTO {
+input UpdateOrderDTO {
+  appartmentId: ID
+  phone: String
   observation: String
-  userId: ID
+  id: ID!
+}
+
+input CreateProductOnOrderDTO {
+  productId: ID!
+  orderId: ID!
+  price: Float!
+  quantity: Float!
+}
+
+input UpdateProductOnOrderDTO {
+  productId: ID
+  orderId: ID
+  price: Float
+  quantity: Float
   id: ID!
 }

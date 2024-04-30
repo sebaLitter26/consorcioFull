@@ -143,8 +143,6 @@ export class ProductComponent implements OnInit{
         //this.updateTable();
 
         this.productService.updateProductEvent.subscribe((update: boolean) => {
-            console.log('updateTable subscription');
-            
             this.updateTable();
           });
     

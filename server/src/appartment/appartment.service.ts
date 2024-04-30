@@ -1,5 +1,5 @@
 import { Injectable } from '@nestjs/common';
-import { PrismaService } from 'src/core/prisma/prisma.service';
+import { PrismaService } from './../core/prisma/prisma.service';
 import { CreateAppartmentDTO } from './dto/create-appartment.dto';
 import { UpdateAppartmentDTO } from './dto/update-appartment.dto';
 
@@ -9,14 +9,14 @@ export class AppartmentService {
 
   async getMany() {
     return await this.data.appartment.findMany({
-      include: { building: true, owner: true, tenant: true },
+      include: { building: true, users: true },
     });
   }
 
   async get(id: string) {
     return await this.data.appartment.findUnique({
       where: { id },
-      include: { building: true, owner: true, tenant: true },
+      include: { building: true, users: true },
     });
   }
 
@@ -24,7 +24,7 @@ export class AppartmentService {
 
     return await this.data.appartment.create({
       data,
-      include: { building: true, owner: true, tenant: true },
+      include: { building: true, users: true },
     });
   }
 
@@ -32,7 +32,7 @@ export class AppartmentService {
     return await this.data.appartment.update({
       where: { id: data.id },
       data,
-      include: { building: true, owner: true, tenant: true },
+      include: { building: true },
     });
   }
 

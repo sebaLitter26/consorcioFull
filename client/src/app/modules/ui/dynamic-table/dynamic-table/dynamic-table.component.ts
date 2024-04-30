@@ -1,7 +1,7 @@
 import { animate, state, style, transition, trigger } from '@angular/animations';
 import { CdkDragDrop, moveItemInArray } from '@angular/cdk/drag-drop';
 import { ViewportScroller } from '@angular/common';
-import { AfterViewInit, ChangeDetectorRef, Component, ComponentFactoryResolver, EventEmitter, Input, OnDestroy, OnInit, Output, QueryList, Renderer2, Type, ViewChild, ViewChildren, ViewEncapsulation } from '@angular/core';
+import { AfterViewInit, ChangeDetectorRef, Component, ComponentFactoryResolver, ComponentRef, EventEmitter, Input, OnDestroy, OnInit, Output, QueryList, Renderer2, Type, ViewChild, ViewChildren, ViewEncapsulation } from '@angular/core';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatTableDataSource } from '@angular/material/table';
 import { fromEvent, Observable, Subscription } from 'rxjs';
@@ -14,7 +14,6 @@ import { ItemDetailDirective } from '../directives/item-detail.directive';
 import { DynamicComponent, CustomCellComponent, DynamicTableDefinition, DynamicTableGroupingHeader, DynamicTableSearchItem, ItemDetailComponent } from '..';
 import { MatCheckbox, MatCheckboxChange } from '@angular/material/checkbox';
 import { of } from 'rxjs';
-import { detailExpand, hoverExpand, inOutAnimation, rotate } from 'src/app/modules/routes/animations';
 
 type SortingOrder = "asc" | "desc";
 
@@ -67,7 +66,23 @@ const RIGHT_HIGHLIGHT: string = "";
     selector: 'app-dynamic-table',
     templateUrl: './dynamic-table.component.html',
     styleUrls: ['./dynamic-table.component.scss'],
-    animations: [inOutAnimation, detailExpand, hoverExpand, rotate],
+    animations: [
+        trigger('detailExpand', [
+            state('collapsed', style({height: '0px', minHeight: '0'})),
+            state('expanded', style({height: '*'})),
+            transition('expanded <=> collapsed', animate('225ms cubic-bezier(0.4, 0.0, 0.2, 1)')),
+        ]),
+        trigger('hoverExpand', [
+            state('collapsed', style({width: '0px', minWidth: '0', opacity: '0'})),
+            state('expanded', style({width: '75px', opacity: '1'})),
+            transition('expanded <=> collapsed', animate('225ms cubic-bezier(0.4, 0.0, 0.2, 1)')),
+        ]),
+        trigger('rotate', [
+            state('right', style({ transform: 'rotate(0deg)'})),
+            state('bottom', style({ transform: 'rotate(90deg)'})),
+            transition('right <=> bottom', animate('225ms cubic-bezier(0.4, 0.0, 0.2, 1)')),
+        ]),
+    ],
 })
 export class DynamicTableComponent implements OnInit, AfterViewInit, OnDestroy {
 
@@ -332,6 +347,8 @@ export class DynamicTableComponent implements OnInit, AfterViewInit, OnDestroy {
 
     dragDisabled: boolean = true;
 
+    componentRefs: ComponentRef<CustomCellComponent>[] = [];
+
     constructor(
         //private componentFactoryResolver: ComponentFactoryResolver,
         public utilsService: UtilsService,
@@ -552,6 +569,13 @@ export class DynamicTableComponent implements OnInit, AfterViewInit, OnDestroy {
     ngOnDestroy(): void {
         if (this.searchSubscription) {
             this.searchSubscription.unsubscribe();
+        }
+
+        // release component refs to avoid memory leak
+        for (const componentRef of this.componentRefs) {
+            if (componentRef) {
+              componentRef.destroy();
+            }
         }
     }
 
@@ -779,7 +803,7 @@ export class DynamicTableComponent implements OnInit, AfterViewInit, OnDestroy {
                     this._activeSorts.splice(currentIndex, 1);
                 }
             }
-
+            
             // Aplico los filtros y el ordenamiento
             this.__applyFilterSort__();
         }
@@ -847,15 +871,18 @@ export class DynamicTableComponent implements OnInit, AfterViewInit, OnDestroy {
     private __applySort__(): void {
         if (this.useSorting) {
             for (let sort of this._activeSorts) {
+                
                 this._filteredOrderedData.sort((a, b) => {
                     const _a: any = a[this.displayedColumns[sort.sortBy]];
                     const _b: any = b[this.displayedColumns[sort.sortBy]];
 
-                    if (sort.value == 'asc') {
-                        return <any>(_a > _b) - <any>(_a < _b);
-                    }
-
-                    return <any>(_b > _a) - <any>(_b < _a);
+                    if(sort.value == 'asc')
+                        return <any>(_a > _b) - <any>(_a < _b)
+                    else if(sort.value == 'desc') 
+                        return <any>(_b > _a) - <any>(_b < _a);
+                    else return 0;
+                    
+                    
                 });
             }
         }
@@ -871,6 +898,7 @@ export class DynamicTableComponent implements OnInit, AfterViewInit, OnDestroy {
         this.__applySort__();
 
         this.dataSource = new MatTableDataSource<any>( this._filteredOrderedData);
+        
 
         if (this.paginator) {
             this.dataSource.paginator = this.paginator;
@@ -961,19 +989,63 @@ export class DynamicTableComponent implements OnInit, AfterViewInit, OnDestroy {
             // Índice de inicio a partir del cual se itera el array de componentes custom
             let _startIndex: number = 0;
 
+            // release component refs to avoid memory leak
+            for (const componentRef of this.componentRefs) {
+                if (componentRef)  
+                    componentRef.destroy();
+            }
+            this.changeDetectorRef.detectChanges();
+            
+
             if (this._customCellDirectiveQueryList) {
-                
+
+                this._customCellDirectiveQueryList.forEach((item: CustomCellDirective) => item.viewContainerRef.remove())
+                this.changeDetectorRef.detectChanges();
+
                 this._customCellDirectiveQueryList.forEach((item: CustomCellDirective) => {
+                
+                
                     // Flag que indica si se encontró un componente custom para la columna actual
                     let found: boolean = false;
-                    
-                    while (!found && columnIndex< 50) {
-                        if (this.customColumnComponents[columnIndex]) {
-                            const columnComponent = this.customColumnComponents[columnIndex];
 
+                    /* while (!found && columnIndex< 30) { 
+                        if (!this.customColumnComponents[columnIndex]) {
+                            columnIndex++;
+                        } else{
+                            _startIndex = columnIndex;
+                            found = true;
+
+                        }
+                    }
+
+                    if(found){
+
+                        const columnComponent = this.customColumnComponents[columnIndex];
+                        //const componentFactory = this.componentFactoryResolver.resolveComponentFactory((<DynamicComponent>columnComponent).type ?? <Type<CustomCellComponent>>columnComponent);
+
+                        const viewContainerRef = item.viewContainerRef;
+                        
+                        viewContainerRef.detach();
+                        const componentRef = viewContainerRef.createComponent<CustomCellComponent>( (<DynamicComponent>columnComponent).type ?? <Type<CustomCellComponent>>columnComponent);
+                    
+                        componentRef.instance.data = this.dataSource?.data[rowIndex];
+
+                        if(columnComponent && ('componentData' in columnComponent)) {    
+                            componentRef.instance.componentData = columnComponent.componentData;
+                        }
+
+                        this.componentRefs.push(componentRef);
+
+                    } */
+                    
+                    while (!found && columnIndex< 30) { 
+                        if (!this.customColumnComponents[columnIndex]) {   //recorre las columnas hasta encontrar algun componente
+                            //renderiza el componente
+                            const columnComponent = this.customColumnComponents[columnIndex];
                             //const componentFactory = this.componentFactoryResolver.resolveComponentFactory((<DynamicComponent>columnComponent).type ?? <Type<CustomCellComponent>>columnComponent);
 
                             const viewContainerRef = item.viewContainerRef;
+                            
                             viewContainerRef.clear();
                             const componentRef = viewContainerRef.createComponent<CustomCellComponent>( (<DynamicComponent>columnComponent).type ?? <Type<CustomCellComponent>>columnComponent);
                         
@@ -983,11 +1055,14 @@ export class DynamicTableComponent implements OnInit, AfterViewInit, OnDestroy {
                                 componentRef.instance.componentData = columnComponent.componentData;
                             }
 
+                            this.componentRefs.push(componentRef);
+                           
                             _startIndex = columnIndex;
                             found = true;
-                        } else {
+                        }else{
                             columnIndex++;
-                        }
+                            
+                        } 
                     }
 
                     rowIndex++;

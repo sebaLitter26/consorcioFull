@@ -3,6 +3,7 @@ import { GqlExecutionContext } from '@nestjs/graphql';
 import { User } from '../../user/model/user';
 //import { ValidRoles } from '../enums/valid-roles.enum';
 import { Roles } from '@prisma/client';
+import { jwtDecode } from 'jwt-decode';
 
 
 
@@ -11,23 +12,28 @@ export const CurrentUser = createParamDecorator(
 
 
         const ctx = GqlExecutionContext.create( context );
-        const user: User = ctx.getContext().req.user;
+        const request = ctx.getContext().req;
+        //const user: User = request.user;
 
-        if ( !user ) {
+        const usetFromToken: any = jwtDecode(request.headers['authorization']);
+
+        if ( !usetFromToken ) {
             throw new InternalServerErrorException(`No user inside the request - make sure that we used the AuthGuard`);
         }
 
-        if ( roles.length === 0 ) return user;
+        return usetFromToken;
 
-        for ( const role of user.roles ) {
+        if ( roles.length === 0 ) return usetFromToken;
+
+        for ( const role of usetFromToken.roles ) {
             // TODO: Eliminar Valid Roles
             if ( roles.includes( role as Roles ) ) {
-                return user;
+                return usetFromToken;
             }
         }
 
         throw new ForbiddenException(
-            `User ${ user.name } need a valid role [${ roles }]`
+            `User ${ usetFromToken.name } need a valid role [${ roles }]`
         )
 
 })

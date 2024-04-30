@@ -3,30 +3,30 @@ import { Appartment } from '../../appartment/model/appartment';
 
 @ObjectType()
 export class Building {
-  @Field(() => ID, { nullable: true })
+  @Field(() => ID)
   id: string;
 
-  @Field({ nullable: true })
+  @Field()
   createdAt: Date;
 
-  @Field({ nullable: true })
+  @Field()
   updatedAt: Date;
 
-  @Field({ nullable: true })
+  @Field()
   address: string;
 
-  @Field({ nullable: true })
+  @Field()
   location: string;
 
-  @Field({ nullable: true })
+  @Field()
   floors: number;
 
-  @Field({ nullable: true })
+  @Field()
   letter: string;
 
   @Field(() => [String] , { nullable: true })
   images: string[];
 
-  @Field(() => [Appartment] , { nullable: true })
+  @Field(() => [Appartment])
   appartments: Appartment[];
 }

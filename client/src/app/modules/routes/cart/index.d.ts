@@ -7,24 +7,28 @@ export interface Product {
     brand: string,
     name: string,
     description: string,
-    picture: string,
+    images: string[],
     price:number,
     stock:number
 }
 
 export interface Cart {
-    id: string,
+    productId: string,
     price:number,
     quantity: number;
 }
 
 /**Los pedidos previos hechos en ese departamento */
 export interface Order {
-    buildingId?: string,
-    depto?: string,
-    floor?: number,
+    appartmentId?: string,
+    //userId?: string,
     phone?: string,
-    observaciones?: string,
+    observation?: string,
+    //cart: Cart[],
+}
+
+/**Los pedidos previos hechos en ese departamento */
+export interface ProductsOnOrder {
     cart: Cart[],
 }
 

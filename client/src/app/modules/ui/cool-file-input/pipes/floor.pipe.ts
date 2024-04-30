@@ -8,6 +8,6 @@ export class FloorPipe implements PipeTransform {
     constructor() {}
 
     transform(floor: number, ...args: any[]): string {
-        return (floor) ? `${floor}ro` : `PB`;
+        return (floor) ? `${floor}` : `PB`;
     }
 }

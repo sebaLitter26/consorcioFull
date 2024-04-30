@@ -4,7 +4,7 @@ import { map, Observable, of } from "rxjs";
 import { Building, BuildingListFilters } from '../../consorcio/building';
 import { BUILDINGS } from '../../consorcio/building/services/building.graphql';
 import { Order, Product } from '..';
-import { ORDERS, PRODUCTS } from './graphql';
+import { CREATE_ORDER, ORDERS, PRODUCTS } from './graphql';
 
 const DEFAULT_BUILDING_FILTERS: BuildingListFilters = {
     address: null,
@@ -23,10 +23,7 @@ const DEFAULT_BUILDING_FILTERS: BuildingListFilters = {
 @Injectable()
 export class CartService {
 
-    constructor(
-        
-        public apollo: Apollo,
-    ) {}
+    constructor( public apollo: Apollo ) {}
 
 
     convertJsonToUrlParams(data:any){
@@ -42,9 +39,13 @@ export class CartService {
     getProducts(): Observable<Product[]>{
         return this.apollo.watchQuery({
             query: PRODUCTS,
-            //variables: DEFAULT_PRODUCT_FILTERS,
+            //variables: DEFAULT_PRODUCT_FILTERS, {...signInResponse.user, token: signInResponse.token}
             fetchPolicy: 'network-only'
-        }).valueChanges.pipe(map((result: any) => result.data.products));
+        }).valueChanges.pipe(map((result: any) => result.data.products.map((produ: Product) => {
+
+         return {...produ , images: produ.images.map((elem: string) => elem = JSON.parse(elem)['secure_url'] ) }  }
+
+        )));
     }
 
     getOrdersByAppartment(appartmentId: string) {
@@ -54,7 +55,8 @@ export class CartService {
             query: ORDERS,
             variables: {appartmentId},
             fetchPolicy: 'network-only'
-        }).valueChanges.pipe(map((result: any) => result.data.products));
+        }).valueChanges.pipe(map((result: any) => result.data.products
+        ));
 
     }
 
@@ -79,6 +81,11 @@ export class CartService {
     }
 
     createOrder(order: Order): Observable<Order> {
+        return this.apollo.mutate({
+            mutation: CREATE_ORDER,
+            variables: {input: order},
+            fetchPolicy: 'network-only'
+        }).pipe(map((result: any) => result.data.order));
         //const updateCreate =(order.id>0) ? 'UpdateOrder' : 'InsertOrder';
         return of()
         //this.http.post<Order>(`${environment.apiUrl}/${updateCreate}`, order);

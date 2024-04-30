@@ -3,35 +3,47 @@
 
 import { Module } from '@nestjs/common';
 import { CoreModule } from './core/core.module';
-import { QuestionModule } from './question/question.module';
+/* import { QuestionModule } from './question/question.module';
 import { AnswerModule } from './answer/answer.module';
 import { CategoryModule } from './category/category.module';
-import { QuizModule } from './quiz/quiz.module';
-import { CommonModule } from './common/common.module';
-import { PassportModule } from '@nestjs/passport';
-import { AuthModule } from './auth/auth.module';
-import { UserModule } from './user/user.module';
-import { AppartmentModule } from './appartment/appartment.module';
-import { BuildingModule } from './building/building.module';
+import { QuizModule } from './quiz/quiz.module'; 
 import { OwnerModule } from './owner/owner.module';
 import { TenantModule } from './tenant/tenant.module';
+*/
+import { CommonModule } from './common/common.module';
+import { PassportModule } from '@nestjs/passport';
+import { ConfigModule } from '@nestjs/config';
+
+import { AuthModule } from './auth/auth.module';
+import { UserModule } from './user/user.module';
+
+import { AppartmentModule } from './appartment/appartment.module';
+import { BuildingModule } from './building/building.module';
+
+import { ProductModule } from './product/product.module';
+import { OrderModule } from './order/order.module';
+import { ProductOnOrderModule } from './product-on-order/product-on-order.module';
+
 
 
 @Module({
   imports: [
     CoreModule,
-    QuestionModule,
-    AnswerModule,
-    CategoryModule,
-    QuizModule,
+    //QuestionModule,
+    //AnswerModule,
+    //CategoryModule,
+    //QuizModule,
     CommonModule,
     UserModule,
     AuthModule,
+    ConfigModule.forRoot(),
     PassportModule.register({ session: true }),
     AppartmentModule,
     BuildingModule,
-    OwnerModule,
-    TenantModule
+    ProductModule,
+    OrderModule,
+    ProductOnOrderModule,
+    //TenantModule
     
   ]
 })

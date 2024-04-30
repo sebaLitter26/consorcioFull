@@ -120,7 +120,7 @@ export class OrderHistoricComponent{
         private overlayService: OverlayService,
         private fb: FormBuilder,
         private changeDetectorRef: ChangeDetectorRef,
-        private datepipe: DatePipe,
+        private datePipe: DatePipe,
         public router: Router,
     ) {
         this.searchOrders();
@@ -131,8 +131,8 @@ export class OrderHistoricComponent{
         const formList = this.formRenditionListGroup.controls;
 
         const filters: any = {
-            desde: this.datepipe.transform(new Date(formList.fechaDesdeControl.value!), 'yyyyMMdd')!, 
-            hasta: this.datepipe.transform(new Date(formList.fechaHastaControl.value ?? this.today), 'yyyyMMdd')!,
+            desde: this.datePipe.transform(new Date(formList.fechaDesdeControl.value!), 'yyyyMMdd')!, 
+            hasta: this.datePipe.transform(new Date(formList.fechaHastaControl.value ?? this.today), 'yyyyMMdd')!,
             legajo: formList.legajoControl.value ?? '',
             phone: formList.dniControl.value ?? '',
             result: formList.resultadoControl.value ?? '',

@@ -2,8 +2,8 @@ import { HttpStatus, ValidationPipe } from '@nestjs/common';
 import { HttpAdapterHost, NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
 import { PrismaClientExceptionFilter } from './interceptors/all-exceptions-filter';
-import * as session from 'express-session';
-import * as passport from 'passport';
+import session from 'express-session';
+import passport from 'passport';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);

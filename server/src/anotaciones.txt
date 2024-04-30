@@ -1,8 +1,52 @@
 Trae los cambios de la base -> schema 
 npx prisma db pull 
 
+npm run build
+
 Trae los cambios del schema -> base de datos 
 npm run prisma:apply 
 
 
 npx prisma migrate dev --name rename-migration --create-only
+
+
+Order Entity
+
+{
+  "cart": [
+    {
+      "id": "5fc20456-c69f-4187-b109-338971b50622",
+      "price": 500,
+      "quantity": 1
+    },
+    {
+      "id": "2d38fa0e-b044-4f12-b299-aa54ca0962f4",
+      "price": 800,
+      "quantity": 1
+    },
+    {
+      "id": "010a06ec-3bd5-42ac-93f6-14e2172740d9",
+      "price": 300,
+      "quantity": 1
+    }
+  ],
+  "buildingId": "956069aa-1144-449f-96c7-89d004934a8c",
+  "depto": "B",
+  "floor": 2,
+  "phone": "+5491165404122",
+  "observaciones": ""
+}
+
+
+
+type ProductOnOrder12 {
+  id        String  @default(uuid())
+  productId String
+  orderId   String
+  quantity  Int
+  price     Int
+  order     Order   @relation("ProductOnOrder", fields: [orderId], references: [id])
+  product   Product @relation("ProductOnOrder1", fields: [productId], references: [id])
+
+  @@id([productId, orderId])
+}

@@ -7,51 +7,21 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-model Category {
-  id        String     @id @default(uuid())
-  createdAt DateTime   @default(now())
-  updatedAt DateTime   @updatedAt
-  name      String     @unique
-  questions Question[]
-
-  @@index([name])
-}
-
-model Question {
-  id         String    @id @default(uuid())
-  createdAt  DateTime  @default(now())
-  updatedAt  DateTime  @updatedAt
-  content    String
-  categoryId String?
-  answers    Answer[]
-  category   Category? @relation(fields: [categoryId], references: [id])
-}
-
-model Answer {
-  id         String    @id @default(uuid())
-  createdAt  DateTime  @default(now())
-  updatedAt  DateTime  @updatedAt
-  content    String
-  isCorrect  Boolean   @default(false)
-  url        String
-  questionId String?
-  question   Question? @relation(fields: [questionId], references: [id])
-}
-
 model User {
-  id           String   @id @default(uuid())
-  email        String   @unique
-  password     String
+  id           String      @id @default(uuid())
+  email        String      @unique
   name         String
-  roles        Roles[]  @default([user])
-  isActive     Boolean  @default(true)
-  createdAt    DateTime @default(now())
-  updatedAt    DateTime @updatedAt
-  userId       String?  @unique
-  owner        Owner?
-  tenant       Tenant?
-  lastUpdateBy User?    @relation("lastUpdateByUser", fields: [userId], references: [id])
-  updateBy     User?    @relation("lastUpdateByUser")
+  isActive     Boolean     @default(true)
+  createdAt    DateTime    @default(now())
+  updatedAt    DateTime    @updatedAt
+  appartmentId String?     @unique
+  notes        String?
+  picture      String
+  rol          Roles       @default(tenant)
+  phone        String?     @unique
+  modifierId   String?     @unique
+  order        Order[]
+  appartment   Appartment? @relation(fields: [appartmentId], references: [id])
 
   @@index([email])
 }
@@ -71,71 +41,57 @@ model Building {
 }
 
 model Appartment {
-  id          String    @id @default(uuid())
-  createdAt   DateTime  @default(now())
-  updatedAt   DateTime  @updatedAt
-  observation String
+  id          String   @id @default(uuid())
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  buildingId  String
   floor       Int
-  letter      String    @db.Char(1)
-  buildingId  String?
-  tenantId    String?   @unique
-  ownerId     String?
-  building    Building? @relation(fields: [buildingId], references: [id])
-  owner       Owner?    @relation(fields: [ownerId], references: [id])
-  tenant      Tenant?   @relation(fields: [tenantId], references: [id])
+  letter      String   @db.Char(1)
+  observation String
+  building    Building @relation(fields: [buildingId], references: [id], onDelete: Cascade)
+  orders      Order[]
+  users       User[]
 
   @@unique([floor, letter, buildingId])
 }
 
-model Tenant {
-  id          String      @id @default(uuid())
-  createdAt   DateTime    @default(now())
-  updatedAt   DateTime    @updatedAt
-  observation String
-  userId      String?     @unique
-  appartments Appartment?
-  user        User?       @relation(fields: [userId], references: [id])
-}
-
-model Owner {
-  id          String       @id @default(uuid())
-  createdAt   DateTime     @default(now())
-  updatedAt   DateTime     @updatedAt
-  observation String
-  userId      String?      @unique
-  appartments Appartment[]
-  user        User?        @relation(fields: [userId], references: [id])
-}
-
 model Product {
-  id        String           @id @default(uuid())
-  name      String
-  photo     String
-  price     Int
-  stock     Int
-  createdAt DateTime         @default(now())
-  updatedAt DateTime         @updatedAt
-  brand     String
-  carts     ProductOnOrder[] @relation("ProductOnOrder")
+  id          String           @id @default(uuid())
+  name        String
+  images      String[]
+  price       Int
+  stock       Int
+  createdAt   DateTime         @default(now())
+  updatedAt   DateTime         @updatedAt
+  brand       String
+  description String?
+  cart        ProductOnOrder[]
 }
 
 model Order {
-  id        String           @id @default(uuid())
-  cartItems ProductOnOrder[] @relation("ProductOnOrder")
+  id           String           @id @default(uuid())
+  appartmentId String          @unique
+  userId       String?
+  appartment   Appartment?      @relation(fields: [appartmentId], references: [id])
+  customer     User?            @relation(fields: [userId], references: [id])
+  cart         ProductOnOrder[]
+  observation  String?
 }
 
 model ProductOnOrder {
+  id        String  @default(uuid())
   productId String
   orderId   String
   quantity  Int
-  order     Order   @relation("ProductOnOrder", fields: [orderId], references: [id])
-  product   Product @relation("ProductOnOrder", fields: [productId], references: [id])
+  price     Int
+  order     Order   @relation(fields: [orderId], references: [id], onDelete: Cascade)
+  product   Product @relation(fields: [productId], references: [id])
 
-  @@id([productId, orderId])
+  @@unique([productId, orderId])
 }
 
 enum Roles {
   admin
-  user
-  superUser
+  tenant
+  owner
 }

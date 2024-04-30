@@ -1,7 +1,7 @@
 import { BadRequestException, Injectable, NotFoundException } from '@nestjs/common';
 import { Appartment, Building } from '@prisma/client';
-import { PrismaService } from 'src/core/prisma/prisma.service';
-import { PublicErrors } from 'src/interceptors/public-errors.enum';
+import { PrismaService } from './../core/prisma/prisma.service';
+import { PublicErrors } from './../interceptors/public-errors.enum';
 import { CreateBuildingDTO } from './dto/create-building.dto';
 import { UpdateBuildingDTO } from './dto/update-building.dto';
 
@@ -39,7 +39,7 @@ export class BuildingService {
       let appartments: Appartment[] = [];
       let LETTERS_APPARTMENT = 'ABCDEF';
       let floor = 0;
-      while(data.floors > floor){
+      while(data.floors >= floor){
         let letterIndex = 0;
         let maxletter = LETTERS_APPARTMENT.indexOf(data.letter);
         while(letterIndex <= maxletter){
@@ -50,8 +50,7 @@ export class BuildingService {
             id: undefined, 
             createdAt: new Date(), 
             updatedAt: new Date(), 
-            ownerId: undefined, 
-            tenantId: undefined, 
+            //users: [], 
             buildingId: undefined
 
           });
@@ -101,7 +100,10 @@ export class BuildingService {
   async delete(id: string) {
     //const building = await this.getBuilding(id);
 
-    return await this.data.building.delete({ where: { id } });
+    return await this.data.building.delete({ 
+      where: { id },
+      include: { appartments:  true  },
+    });
   }
 
 
