@@ -2,20 +2,19 @@ import { Field, ID, ObjectType } from '@nestjs/graphql';
 
 import { Product } from '../../product/model/product';
 import { Order } from '../../order/model/order';
-import { Entity } from 'typeorm';
+import { BaseModel } from 'src/shared/models/base.model';
 
-@Entity('productOnOrder')
 @ObjectType()
-export class ProductOnOrder {
+export class ProductOnOrderEntity extends BaseModel {
 
-  @Field(() => ID, { nullable: true })
+  /* @Field(() => ID, { nullable: true })
   id: string;
 
   @Field()
   createdAt: Date;
 
   @Field()
-  updatedAt: Date;
+  updatedAt: Date; */
 
   @Field({ nullable: false })
   quantity: number;
@@ -32,7 +31,7 @@ export class ProductOnOrder {
   @Field(() => ID, { nullable: true })
   orderId?: string;
 
-  @Field(() => Order, { nullable: true })
+  @Field(() => Order, { nullable: false })
   order?: Order;
 
 }

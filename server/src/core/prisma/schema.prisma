@@ -70,7 +70,7 @@ model Product {
 
 model Order {
   id           String           @id @default(uuid())
-  appartmentId String          @unique
+  appartmentId String           @unique
   userId       String?
   appartment   Appartment?      @relation(fields: [appartmentId], references: [id])
   customer     User?            @relation(fields: [userId], references: [id])

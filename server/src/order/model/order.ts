@@ -1,10 +1,10 @@
 import { Field, ID, ObjectType } from '@nestjs/graphql';
-import { Entity, Column, PrimaryGeneratedColumn, OneToMany } from 'typeorm';
+//import { Entity, Column, PrimaryGeneratedColumn, OneToMany } from 'typeorm';
 import { Appartment } from '../../appartment/model/appartment';
 import { User } from '../../user/model/user';
-import { ProductOnOrder } from '../../product-on-order/model/product-on-order';
+import { ProductOnOrderEntity } from '../../product-on-order/model/product-on-order';
 
-@Entity('order')
+//@Entity('order')
 @ObjectType()
 export class Order {
   @Field(() => ID, { nullable: true })
@@ -37,9 +37,9 @@ export class Order {
   /* @Field(() => ID, { nullable: true })
   cartIds?: string; */
 
-  @OneToMany( () => ProductOnOrder, (product) => product.orderId )
-  @Field(() => [ProductOnOrder] ,{ nullable: false })
-  cart: ProductOnOrder[]; 
+  //@OneToMany( () => ProductOnOrderEntity, (product) => product.orderId )
+  //@Field(() => [ProductOnOrderEntity] ,{ nullable: false })
+  cart: ProductOnOrderEntity[]; 
 
 }
 

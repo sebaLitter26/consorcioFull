@@ -64,10 +64,18 @@ enum Roles {
   owner
 }
 
+type PageInfo {
+  endCursor: String
+}
+
 type Product {
-  id: ID
-  createdAt: DateTime
-  updatedAt: DateTime
+  id: ID!
+
+  """Identifies the date and time when the object was created"""
+  createdAt: DateTime!
+
+  """Identifies the date and time when the object was last updated"""
+  updatedAt: DateTime!
   price: Float
   stock: Float
   images: [String!]
@@ -76,15 +84,9 @@ type Product {
   brand: String
 }
 
-type ProductOnOrder {
-  id: ID
-  createdAt: DateTime!
-  updatedAt: DateTime!
-  quantity: Float!
-  price: Float!
-  productId: ID!
-  product: Product!
-  orderId: ID
+type ProductEdge {
+  cursor: String!
+  node: Product!
 }
 
 type Order {
@@ -97,7 +99,22 @@ type Order {
   appartmentId: ID
   appartment: Appartment!
   observation: String
-  cart: [ProductOnOrder!]!
+}
+
+type ProductOnOrderEntity {
+  id: ID!
+
+  """Identifies the date and time when the object was created"""
+  createdAt: DateTime!
+
+  """Identifies the date and time when the object was last updated"""
+  updatedAt: DateTime!
+  quantity: Float!
+  price: Float!
+  productId: ID!
+  product: Product!
+  orderId: ID
+  order: Order!
 }
 
 type Query {
@@ -112,8 +129,8 @@ type Query {
   product(id: String!): Product!
   Orders: [Order!]!
   Order(id: String!): Order!
-  ProductOnOrders: [ProductOnOrder!]!
-  ProductOnOrder(id: String!): ProductOnOrder!
+  ProductOnOrders: [ProductOnOrderEntity!]!
+  ProductOnOrder(id: String!): ProductOnOrderEntity!
 }
 
 type Mutation {
@@ -132,9 +149,9 @@ type Mutation {
   createOrder(input: CreateOrderDTO!): Order!
   updateOrder(input: UpdateOrderDTO!): Order!
   deleteOrder(id: String!): Order!
-  createProductOnOrder(input: CreateProductOnOrderDTO!): ProductOnOrder!
-  updateProductOnOrder(input: UpdateProductOnOrderDTO!): ProductOnOrder!
-  deleteProductOnOrder(id: String!): ProductOnOrder!
+  createProductOnOrder(input: CreateProductOnOrderDTO!): ProductOnOrderEntity!
+  updateProductOnOrder(input: UpdateProductOnOrderDTO!): ProductOnOrderEntity!
+  deleteProductOnOrder(id: String!): ProductOnOrderEntity!
 }
 
 input CreateUserInput {

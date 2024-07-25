@@ -1,34 +1,34 @@
 import { Args, Mutation, Query, Resolver } from '@nestjs/graphql';
 import { CreateProductOnOrderDTO } from './dto/create-product-on-order.dto';
 import { UpdateProductOnOrderDTO } from './dto/update-product-on-order.dto';
-import { ProductOnOrder } from './model/product-on-order';
+import { ProductOnOrderEntity } from './model/product-on-order';
 import { ProductOnOrderService } from './product-on-order.service';
-import { Roles, User as UserSchema } from '@prisma/client';
+import { User } from '@prisma/client';
 import { CurrentUser } from 'src/auth/decorators/current-user.decorator';
 
-@Resolver(() => ProductOnOrder)
+@Resolver(() => ProductOnOrderEntity)
 export class ProductOnOrderResolver {
   constructor(private readonly ProductOnOrderService: ProductOnOrderService) {}
 
-  @Query(() => [ProductOnOrder])
+  @Query(() => [ProductOnOrderEntity])
   async ProductOnOrders() {
     return await this.ProductOnOrderService.getMany();
   }
 
-  @Query(() => ProductOnOrder)
+  @Query(() => ProductOnOrderEntity)
   async ProductOnOrder(@Args('id') id: string) {
     return await this.ProductOnOrderService.get(id);
   }
 
-  @Mutation(() => ProductOnOrder)
+  @Mutation(() => ProductOnOrderEntity)
   async createProductOnOrder(
-    @CurrentUser([ ]) user: UserSchema,
+    @CurrentUser([ ]) user: User,
     @Args({ name: 'input', type: () => CreateProductOnOrderDTO }) input: CreateProductOnOrderDTO,
   ) {
     return await this.ProductOnOrderService.create(input, user);
   }
 
-  @Mutation(() => ProductOnOrder)
+  @Mutation(() => ProductOnOrderEntity)
   async updateProductOnOrder(
     @Args({ name: 'input', type: () => UpdateProductOnOrderDTO })
     input: UpdateProductOnOrderDTO,
@@ -36,7 +36,7 @@ export class ProductOnOrderResolver {
     return await this.ProductOnOrderService.update(input);
   }
 
-  @Mutation(() => ProductOnOrder)
+  @Mutation(() => ProductOnOrderEntity)
   async deleteProductOnOrder(@Args('id') id: string) {
     return await this.ProductOnOrderService.delete(id);
   }

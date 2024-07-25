@@ -1,15 +1,17 @@
 import { Field, ID, ObjectType } from '@nestjs/graphql';
+import { BaseModel } from 'src/shared/models/base.model';
+import PaginatedResponse from '../../shared/functions/pagination';
 
 @ObjectType()
-export class Product {
-  @Field(() => ID, { nullable: true })
+export class Product extends BaseModel {
+  /* @Field(() => ID, { nullable: true })
   id: string;
 
   @Field({ nullable: true })
   createdAt?: Date;
 
   @Field({ nullable: true })
-  updatedAt?: Date;
+  updatedAt?: Date; */
 
   @Field({ nullable: true })
   price: number;
@@ -36,3 +38,6 @@ export class Product {
   
 
 }
+
+@ObjectType()
+export class ProductConnection extends PaginatedResponse(Product) {}

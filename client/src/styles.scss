@@ -22,9 +22,9 @@
 // Define the palettes for your theme using the Material Design palettes available in palette.scss
 // (imported above). For each palette, you can optionally specify a default, lighter, and darker
 // hue. Available color palettes: https://material.io/design/color/
-// $dark-color-primary: mat.define-palette(mat.$purple-palette, 500);
-// $dark-color-accent: mat.define-palette(mat.$deep-orange-palette, 500);
-// $dark-color-warn: mat.define-palette(mat.$red-palette, 500);
+// $dark-color-primary: mat.m2-define-palette(mat.$purple-palette, 500);
+// $dark-color-accent: mat.m2-define-palette(mat.$deep-orange-palette, 500);
+// $dark-color-warn: mat.m2-define-palette(mat.$red-palette, 500);
 
 // Create the theme object. A theme consists of configurations for individual
 // theming systems such as "color" or "typography".
@@ -37,23 +37,23 @@
 // ));
 
 // Paleta para esquema de colores claro
-$app-light-theme: mat.define-light-theme(
+$app-light-theme: mat.m2-define-light-theme(
   (
     color: (
-      primary: mat.define-palette(mat.$purple-palette, 500, 100, 900),
-      accent: mat.define-palette(mat.$cyan-palette, A200, A100, A400),
-      warn: mat.define-palette(mat.$red-palette)
+      primary: mat.m2-define-palette(mat.$m2-purple-palette, 500, 100, 900),
+      accent: mat.m2-define-palette(mat.$m2-cyan-palette, A200, A100, A400),
+      warn: mat.m2-define-palette(mat.$m2-red-palette)
     ),
   )
 );
 
 // Paleta para esquema de colores oscuro
-$app-dark-theme: mat.define-dark-theme(
+$app-dark-theme: mat.m2-define-dark-theme(
   (
     color: (
-        primary: mat.define-palette(mat.$teal-palette, 500, 100, 900),
-        accent: mat.define-palette(mat.$pink-palette, A200, A100, A400),
-        warn: mat.define-palette(mat.$red-palette)
+        primary: mat.m2-define-palette(mat.$m2-teal-palette, 500, 100, 900),
+        accent: mat.m2-define-palette(mat.$m2-pink-palette, A200, A100, A400),
+        warn: mat.m2-define-palette(mat.$m2-red-palette)
     ),
   )
 );

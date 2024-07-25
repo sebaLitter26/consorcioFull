@@ -1,6 +1,6 @@
 import { Field, ID, InputType, registerEnumType } from '@nestjs/graphql';
 import { IsAlpha, IsMobilePhone, IsNotEmpty, IsNumber, IsOptional, IsUUID, Max, MaxLength, Min, MinLength } from 'class-validator';
-import { ProductOnOrder } from '../../product-on-order/model/product-on-order';
+import { ProductOnOrderEntity } from '../../product-on-order/model/product-on-order';
 
 
 @InputType()
@@ -27,8 +27,8 @@ export class CreateOrderDTO {
   cartIds: [string]; */
   
   @IsNotEmpty()
-  @Field(type => [ProductOnOrder],{ nullable: true })
-  cart?: ProductOnOrder[];
+  //@Field(() => [ProductOnOrderEntity],{ nullable: true })
+  cart?: ProductOnOrderEntity[];
 
   @IsOptional()
   @Field(()=> String,{ nullable: true })

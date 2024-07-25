@@ -1,30 +1,29 @@
-import { redcoto } from "./environment.utils";
+import { port,apiport } from "./environment.utils";
 
 export const environment = {
-    production: true,
-    preProduction: false,
-    staging: false,
-    apiUrl: `http://slnxdock01cd${redcoto}:5020/api/`,
-    apiInterfaceUrl: `http://slnxdock01cd${redcoto}:5021/interfaces/`,
-    serialApiUrl: "http://localhost:8080/serialapi/",
-    apiIpad: "http://ipadwebservices/empleadosws/ServiceSvc.svc/",
-    apiTrack: "http://apps27/TrackingApiCD/api/",
-    version: `${require('../../package.json').version}`,
-    apiUrlRRHH: `http://desa5web18/ApiRRHH/`
-}
-
-/* export const environment_ticket = {
     production: false,
     preProduction: false,
     staging: false,
-    
-    
-
-    apiUrlpreProduction: `http://apps24/MesaDevoCotoDigi/devol-services-new/api/`,
-    apiUrlproduction: `http://apps24/MesaDevoCotoDigi/devol-services/api/`,
-    apiUrlstaging: `http://apps24/MesaDevoCotoDigiNueva/devol-services/api/`,
-    local: `http://localhost:53979/api/`,
-    desa: `http://desa4web18/MesaDevoCotoDigi/devol-services/api/`,
-    desaNew: `http://desa4web18/MesaDevoCotoDigiNueva/devol-services/api/`,
+    apiUrl: `http://localhost:${apiport}/graphql/`, 
     version: `${require('../../package.json').version}-dev`,
-} */
+    
+    LOCAL_STORAGE_TOKEN: "consorcio_token",
+
+    cloudinary: {
+        name: 'latinmed', 
+        preset: 'itidmuni',
+        api_key: '716319916531578',
+        api_secret: 'PYBHq86YlkJLo_BpnWtrmIlMfeM' 
+    },
+
+    oauth: {
+        domain : 'sebalitter.auth0.com',
+        clientId:'RCgluXpdLwPsqvtMCbdto86jg7X6KRv3',
+        authorizationParams: {
+            audience: `http://localhost:3001/api/`,
+            redirect_uri: `http://localhost:${apiport}`,
+            //scope: REACT_APP_AUTH0_SCOPES,
+        }
+    }
+
+}

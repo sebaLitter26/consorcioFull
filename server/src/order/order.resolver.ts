@@ -3,7 +3,7 @@ import { CreateOrderDTO } from './dto/create-order.dto';
 import { UpdateOrderDTO } from './dto/update-order.dto';
 import { Order } from './model/order';
 import { OrderService } from './order.service';
-import { Roles, User as UserSchema } from '@prisma/client';
+import { User } from '@prisma/client';
 import { CurrentUser } from 'src/auth/decorators/current-user.decorator';
 
 @Resolver(() => Order)
@@ -22,7 +22,7 @@ export class OrderResolver {
 
   @Mutation(() => Order)
   async createOrder(
-    @CurrentUser([ ]) user: UserSchema,
+    @CurrentUser([ ]) user: User,
     @Args({ name: 'input', type: () => CreateOrderDTO }) input: CreateOrderDTO,
   ) {
     return await this.OrderService.create(input, user);

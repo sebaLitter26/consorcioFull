@@ -10,6 +10,8 @@ npm run prisma:apply
 npx prisma migrate dev --name rename-migration --create-only
 
 
+nest g resource users --no-spec
+
 Order Entity
 
 {
